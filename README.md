@@ -1,3 +1,12 @@
 # game-uno
 
-this is a git push test from Peng.
+Project introduction:
+
+# Technical requirements:
+
+Talks about technical details:
+
+# Developers:
+
+Please introduce yourself here:
+
