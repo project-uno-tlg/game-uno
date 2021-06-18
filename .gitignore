@@ -1,5 +1,6 @@
 # intelliJ things
 .idea/
+*.iml
 
 # Compiled class file
 *.class
