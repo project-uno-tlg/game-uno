@@ -1,7 +1,6 @@
 package com.unomas.player;
 
 import com.unomas.dealer.Card;
-import com.unomas.dealer.Deck;
 import com.unomas.dealer.DealerBot;
 
 import java.util.ArrayList;
@@ -10,17 +9,19 @@ import java.util.Scanner;
 
 class AIPlayer extends Player {
 
-    public AIPlayer(List<Card> cardsInHand, String name, boolean isAI) {
-        super(cardsInHand, name, isAI);
+    public AIPlayer(String name, boolean isAI) {
+        super(name, isAI);
     }
 
     @Override
-    public Card playCard(Card cardToMatch, boolean hasValidCard, Card newCard, Card userCard, boolean isUserCardInHand) {
+    public Card playCard() {
         List<Card> playableCards = new ArrayList<>();
         int maxIndex = 0;
         Card playedCard;        //initialize the card to be played by the AI
+        boolean hasValidCard;
 
-        checkCard(cardToMatch);
+        Card cardToMatch = DealerBot.getInstance().getCardToMatch();
+        hasValidCard = checkCard(cardToMatch);
 
         if (hasValidCard) { //assumes == true
             //choose a random playable card to be placed down
@@ -36,18 +37,12 @@ class AIPlayer extends Player {
             maxIndex = playableCards.size();
             playedCard = playableCards.get((int) (Math.random() * (maxIndex)));
             cardsInHand.remove(playedCard);
-
-
-            //System.out.println(playedCard);
-
         }
 
         else {          //if player does not have a hasValidCard have the dealer distribute a card to that player
             playedCard = null;
-            addCard(newCard);
         }
 
         return playedCard;
     }
 }
-

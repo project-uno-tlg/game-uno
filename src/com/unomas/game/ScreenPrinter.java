@@ -14,7 +14,7 @@ public class ScreenPrinter {
     }
 
     public static void playsCard(String name, String color, int number){
-        System.out.println(name + " played a" + color + " " + number );
+        System.out.println(name + " played a " + color + " " + number );
     }
 
     public static void gameOverPlayerQuit(){
