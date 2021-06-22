@@ -17,5 +17,9 @@ public class ScreenPrinter {
         System.out.println(name + " played a" + color + " " + number );
     }
 
+    public static void gameOverPlayerQuit(){
+        System.out.println("Game Over. Player quited game");
+    }
+
 
 }
