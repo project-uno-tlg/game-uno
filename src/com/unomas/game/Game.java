@@ -1,22 +1,26 @@
 package com.unomas.game;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
 
-class Game {
-    public static final int MAX_PLAYER_COUNT = 6;
+import com.apps.util.Prompter;
+//import com.unomas.dealer.DealerBot;
+import com.unomas.dealer.DealerBot;
+import com.unomas.player.Player;
+import com.unomas.player.PlayerFactory;
 
-    private int	playerCount;
-    private LocalDateTime date = LocalDateTime.now();
-    //private Player players;
-   private Prompter prompt;
-    //private DealerBot dealerBot;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Game {
+    public static final int MAX_PLAYER_COUNT = 5;
+
+    private int playerCount;
+    private List<Player> players = new ArrayList<>();
+    private Prompter prompter = new Prompter(new Scanner(System.in));
 
 
     // Constructor
-    public Game(int playerCount, LocalDateTime date) {
-        setPlayerCount(playerCount);
-        setDate(date);
+    public Game() {
     }
 
     // Getters and Setters
@@ -26,41 +30,43 @@ class Game {
     }
 
     public void setPlayerCount(int playerCount) {
-        if (playerCount > MAX_PLAYER_COUNT){
-            prompt.info("Sorry only 6 players allowed");
-        }else {
+        if (playerCount > MAX_PLAYER_COUNT) {
+            System.out.println("Sorry only 6 players allowed");
+        } else {
             this.playerCount = playerCount;
         }
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
 
     // Business Methods
-    public void quit(){
-        if (playerCount == 1){
-            prompt.info("Game Over.");
-            prompt.info("Winner: ");
-            prompt.info("Hit any key to close prompt.");
+    public void quit() {
+        String exitText;
+        exitText = prompter.prompt("Type exit to exit game.");
+        if (exitText.toLowerCase().equals("exit")) {
+
             System.exit(0);
         }
-
-    }
-    public void start(){
-        prompt.info("How many players: ");
     }
 
-//    private Collection<Player> createAI(int count){
-//        return;
-//    }
 
-//    private Player createRealPlayer(String name){
-//
-//    }
+    public void start() throws InterruptedException {
+        setPlayerCount(Integer.parseInt(prompter.prompt("How many computer players: ",
+                "\\d+", "That is not a valid number!")));
+        players.add(createRealPlayer(prompter.prompt("Type your name: ")));
+        createAI(getPlayerCount());
+        DealerBot.getInstance(players).init();
+    }
 
+    private void createAI(int count) {
+        List<Player> computerPlayers = new ArrayList<>();
+        while (count > 0) {
+            players.add(PlayerFactory.createPlayer("computer" + count, true));
+            count--;
+        }
+    }
+
+    private Player createRealPlayer(String name) {
+        Player humanPlayer = PlayerFactory.createPlayer(name, false);
+        return humanPlayer;
+    }
 }

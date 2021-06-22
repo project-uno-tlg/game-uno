@@ -1,41 +1,55 @@
 package com.unomas.player;
 
-import java.awt.*;
-import java.util.Collection;
+import com.unomas.dealer.Card;
+import com.unomas.dealer.DealerBot;
 
-public abstract class Player {
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Player{
 
     //FIELDS
-    Collection<Card> cardsInHand;
-    String name;
-    boolean isAI;           //is this needed????
-    boolean isInTurn;       //same here
+    public List<Card> cardsInHand = new ArrayList<>();
+    public String name;
+    public boolean isAI = false;
+
 
     //CONSTRUCTORS
-    public Player() {
-        //no arg constructor
+    public Player(String name) {
+        this.name = name;
     }
 
-    public Player(Collection<Card> cardsInHand, String name, boolean isAI, boolean isInTurn) {
-        setCardsInHand(cardsInHand);
-        setName(name);
-        setAI(isAI);
-        setInTurn(isInTurn);
+    public Player(String name, boolean isAI) {
+        this.name = name;
+        this.isAI = isAI;
+
     }
 
     //BEHAVIORAL METHODS
-    public abstract Card playCard(cardToMatch);
+    public abstract Card playCard();
 
-    public abstract boolean checkCard(Card);
+    public boolean checkCard(Card cardToMatch) {
+        boolean hasValidCard = false;
 
+        for(Card card : cardsInHand) {
+            if (card.getColor() == cardToMatch.getColor() || card.getNumber() == cardToMatch.getNumber()) {
+                hasValidCard = true;
+            }
+        }
+        return hasValidCard;
+    }
+
+    public void addCard(Card newCard) {
+        cardsInHand.add(newCard);
+    }
 
     //ACCESSOR METHODS
-
-    public Collection<Card> getCardsInHand() {
+    public List<Card> getCardsInHand() {
         return cardsInHand;
     }
 
-    public void setCardsInHand(Collection<Card> cardsInHand) {
+    public void setCardsInHand(List<Card> cardsInHand) {
         this.cardsInHand = cardsInHand;
     }
 
@@ -53,13 +67,5 @@ public abstract class Player {
 
     public void setAI(boolean AI) {
         isAI = AI;
-    }
-
-    public boolean isInTurn() {
-        return isInTurn;
-    }
-
-    public void setInTurn(boolean inTurn) {
-        isInTurn = inTurn;
     }
 }

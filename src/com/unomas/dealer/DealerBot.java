@@ -1,24 +1,35 @@
 package com.unomas.dealer;
 
-import java.util.Collection;
-import java.util.List;
+import com.unomas.game.ScreenPrinter;
+import com.unomas.player.Player;
 
-class DealerBot {
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+public class DealerBot {
     private List<Player> players;
     private Deck deck;
     private int currentPlayerIndex;
     private Card cardToMatch;
+    private static DealerBot dealerBot;
 
     private DealerBot(List<Player> players){
         this.players = players;
     }
 
+    public static DealerBot getInstance() {
+        return dealerBot;
+    }
+
     public static DealerBot getInstance(List<Player> players){
-        return new DealerBot(players);
+        if(dealerBot == null) {
+            dealerBot = new DealerBot(players);
+        }
+        return dealerBot;
     }
 
 
-    public void init(){
+    public void init() throws InterruptedException {
         deck = Deck.getInstance();
         initDistributeCards();
         cardToMatch = deck.drawOneCardFromDeck();
@@ -26,25 +37,57 @@ class DealerBot {
         startGame();
     }
 
-    private void startGame(){
-        boolean tracker = true;
-        while ( tracker){
+    private void startGame() throws InterruptedException {
+
+        while ( true){
+
             Player currentPlayer = players.get(currentPlayerIndex);
-            // try catch for win?
-            Card cardPlayed = currentPlayer.playCard();
-            if (cardPlayed == null){
-                // try catch when deck is out of card?
-                Card newCard = deck.drawOneCardFromDeck();
-                if (currentPlayer.checkCard(newCard)){
-                    cardToMatch = newCard;
-                    updateCurrentPlayer();
-                } else {
-                    updateCurrentPlayer();
-                }
-            } else {
-                cardToMatch = cardPlayed;
-                updateCurrentPlayer();
+
+            if (currentPlayer.isAI() ) {
+                // make computer player pause 3 sec before move
+                TimeUnit.SECONDS.sleep(3);
             }
+
+            Card cardPlayed = currentPlayer.playCard();
+
+
+            // when player has no matching card to play
+            if (cardPlayed == null){
+
+                Card newCard = deck.drawOneCardFromDeck();
+                int cardLeftInDeck = deck.getAllCardsInDeck().size();
+                if (cardLeftInDeck == 0){
+                    ScreenPrinter.gameOverDeckOutOfCard();
+                    return;
+                }
+                // when the new drawing card is a match
+                if (currentPlayer.checkCard(newCard)){
+                    ScreenPrinter.playsCard(currentPlayer.getName(), newCard.getColor().toString(), newCard.getNumber());
+                    cardToMatch = newCard;
+                }
+                // when it's not a match
+                else {
+                    currentPlayer.addCard(newCard);
+                }
+            }
+            // if player want quit the game by playing quit card.
+            else if (cardPlayed.wannaQuit()){
+                ScreenPrinter.gameOverPlayerQuit();
+                return;
+            }
+            // when player has matching card to play
+            else {
+                int cardLeftInHand = currentPlayer.getCardsInHand().size();
+                // winning condition
+                if (cardLeftInHand == 0){
+                    ScreenPrinter.gameOverWithWinner(currentPlayer.getName());
+                    return;
+                }
+                ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed.getColor().toString(), cardPlayed.getNumber());
+                cardToMatch = cardPlayed;
+            }
+            // in the end, update move to the next player.
+            updateCurrentPlayer();
         }
     }
 
@@ -54,11 +97,11 @@ class DealerBot {
 
 
     private void distributeCard(Player player, Card card){
-        player.cardsInHand.add(card);
+        player.addCard(card);
     }
 
     public static int randomPlayer(int max){
-        return (int) (Math.random() * (max  + 1));
+        return (int) (Math.random() * max);
     }
 
     private void updateCurrentPlayer(){
@@ -71,28 +114,6 @@ class DealerBot {
             for (Player player:players){
                 distributeCard(player, deck.drawOneCardFromDeck());
             }
-        }
-    }
-
-
-
-
-
-    // remove it later on
-    // for testing purpose now
-    static class Player{
-        String name;
-        List<Card> cardsInHand;
-        public Player(String name, List<Card> cardsInHand){
-            this.name = name;
-            this.cardsInHand = cardsInHand;
-        }
-
-        public boolean checkCard (Card card){
-            return true;
-        }
-        public Card playCard(){
-            return null;
         }
     }
 }

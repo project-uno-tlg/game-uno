@@ -1,31 +1,100 @@
 package com.unomas.player;
 
-class HumanPlayer extends Player{
+import com.apps.util.Prompter;
+import com.unomas.dealer.Card;
+import com.unomas.dealer.DealerBot;
 
-    @Override
-    public Card playCard(cardToMatch) {
-        checkCard();
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-        if (hasValidCard == true) {
-            //prompt user with opportunity to select what card they will play
-            playedCard = userPrompt;
-            cardsInHand.remove(playedCard);
+class HumanPlayer extends Player {
 
-        }
-
-        return null;
+    public HumanPlayer(String name) {
+        super(name);
     }
 
     @Override
-    public boolean checkCard(Card) {
-        boolean hasValidCard = false;
+    public Card playCard() {
 
-        for(Card card : cardsInHand) {
-            //TODO
-            if () {        //if card color == cardToMatch color || card number == cardToMatch number
-                hasValidCard = true;
+        Card cardToMatch = DealerBot.getInstance().getCardToMatch();
+        boolean hasValidCard;
+        boolean isUserCardInHand;
+
+        Card playedCard = null;        //initialize the card to be played that is prompted by the user
+        Prompter prompter = new Prompter(new Scanner(System.in));
+        String matchCard = "Match this card.";
+        String yourCards = "These are your cards.";
+        String infoText = "It is your turn. What card do you want to play?";
+        String promptColorText = "Please enter the color of the card you want to play.";
+        String promptNumberText = "Please enter the number of the card you want to play.";
+        String retryText = "That is not a valid input. Please try again.";
+        String noValidCards = "There are no valid cards in your hand. You must draw a card.";
+
+        String colorInput;
+        String numberInput;
+
+            //while loop
+            //checkCard to make sure player has any valid cards
+            //if yes
+            //prompt user what card they want to play
+            //convert string
+            //check if this is in their hand
+            //check if this is a hasValidCard
+            //if not valid try again message
+            //else remove card and break out of the loop
+            //if not
+
+            while (true) {
+                prompter.info(matchCard + cardToMatch);
+                prompter.info(yourCards + cardsInHand);
+
+                hasValidCard = checkCard(cardToMatch);
+                if (hasValidCard) {
+
+                    prompter.info(infoText);        //prompts the user that it is their turn and asks them to play a card
+                    colorInput = prompter.prompt(promptColorText).toUpperCase();      //asks which color
+                    numberInput = prompter.prompt(promptNumberText);    //asks which number
+
+                    Card.CardColor cardColor = Card.CardColor.valueOf(colorInput);      //converts the input string color to an enum
+                    int userInputNumber = Integer.parseInt(numberInput);                //converts the input string number to a int
+
+                    boolean tracker = false;
+                    for (Card card : cardsInHand) {
+                        isUserCardInHand = checkIfCardInHand(card, userInputNumber, cardColor);
+                        if (isUserCardInHand) {
+                            playedCard = card;
+                            cardsInHand.remove(card);
+                            tracker = true;
+                            break;
+                        }
+                    }
+
+                    if (tracker) {
+                        break;
+                    }
+
+                    if (colorInput.equalsIgnoreCase("quit") || numberInput.equalsIgnoreCase("quit")) {
+                        playedCard = Card.getQuitCard();
+                        break;
+                    }
+
+                    prompter.info(retryText);
+                }
+                else {          //if player does not have a hasValidCard have the dealer distribute a card to that player
+                    prompter.info(noValidCards);
+                    playedCard = null;
+                    break;
+                }
             }
+        return playedCard;
+    }
+
+    public boolean checkIfCardInHand(Card card, int userInputNumber, Card.CardColor cardColor) {
+        boolean isUserCardInHand = false;
+        if (userInputNumber == card.getNumber() && cardColor == card.getColor()) {
+            isUserCardInHand = true;
         }
-        return hasValidCard;
+        return isUserCardInHand;
     }
 }
