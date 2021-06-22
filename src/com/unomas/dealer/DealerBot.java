@@ -41,6 +41,7 @@ public class DealerBot {
 
             Card cardPlayed = currentPlayer.playCard();
 
+
             // when player has no matching card to play
             if (cardPlayed == null){
 
@@ -59,6 +60,11 @@ public class DealerBot {
                 else {
                     currentPlayer.addCard(newCard);
                 }
+            }
+            // if player want quit the game by playing quit card.
+            else if (cardPlayed.wannaQuit()){
+                ScreenPrinter.gameOverPlayerQuit();
+                return;
             }
             // when player has matching card to play
             else {
