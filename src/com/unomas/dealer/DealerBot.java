@@ -1,7 +1,9 @@
 package com.unomas.dealer;
 
-import java.util.Collection;
+import com.unomas.game.ScreenPrinter;
+
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class DealerBot {
     private List<Player> players;
@@ -18,7 +20,7 @@ public class DealerBot {
     }
 
 
-    public void init(){
+    public void init() throws InterruptedException {
         deck = Deck.getInstance();
         initDistributeCards();
         cardToMatch = deck.drawOneCardFromDeck();
@@ -26,45 +28,51 @@ public class DealerBot {
         startGame();
     }
 
-    private void startGame(){
-        boolean tracker = true;
-        while ( tracker){
+    private void startGame() throws InterruptedException {
+
+        while ( true){
+
             Player currentPlayer = players.get(currentPlayerIndex);
-            Card cardPlayed = currentPlayer.playCard();
-            int cardLeftInHand = currentPlayer.getCardsInHand().size();
-            // winning condition
-            if (cardLeftInHand == 0){
-                System.out.println("The game is over, winner is" + currentPlayer.getName());
-                return;
+
+            if (currentPlayer.isAI() ) {
+                // make computer player pause 3 sec before move
+                TimeUnit.SECONDS.sleep(3);
             }
+
+            Card cardPlayed = currentPlayer.playCard();
+
             // when player has no matching card to play
             if (cardPlayed == null){
 
                 Card newCard = deck.drawOneCardFromDeck();
                 int cardLeftInDeck = deck.getAllCardsInDeck().size();
                 if (cardLeftInDeck == 0){
-                    System.out.println("nobody win, we're out of cards");
+                    ScreenPrinter.gameOverDeckOutOfCard();
                     return;
                 }
                 // when the new drawing card is a match
                 if (currentPlayer.checkCard(newCard)){
-                    System.out.println(currentPlayer.getName() + " played a " + newCard.getColor() + newCard.getNumber());
+                    ScreenPrinter.playsCard(currentPlayer.getName(), newCard.getColor().toString(), newCard.getNumber());
                     cardToMatch = newCard;
-                    updateCurrentPlayer();
                 }
                 // when it's not a match
                 else {
                     currentPlayer.addCard(newCard);
-                    updateCurrentPlayer();
                 }
             }
             // when player has matching card to play
             else {
-                System.out.println(currentPlayer.getName() + " played a " + cardPlayed.getColor() + cardPlayed.getNumber());
-
+                int cardLeftInHand = currentPlayer.getCardsInHand().size();
+                // winning condition
+                if (cardLeftInHand == 0){
+                    ScreenPrinter.gameOverWithWinner(currentPlayer.getName());
+                    return;
+                }
+                ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed.getColor().toString(), cardPlayed.getNumber());
                 cardToMatch = cardPlayed;
-                updateCurrentPlayer();
             }
+            // in the end, update move to the next player.
+            updateCurrentPlayer();
         }
     }
 
@@ -122,6 +130,9 @@ public class DealerBot {
         }
         public void addCard(Card card){
             cardsInHand.add(card);
+        }
+        public boolean isAI(){
+            return true;
         }
 
     }
