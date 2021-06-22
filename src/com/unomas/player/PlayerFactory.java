@@ -1,15 +1,15 @@
-package com.unomas.game;
+package com.unomas.player;
 
 import com.unomas.player.Player;
 
-class PlayerFactory {
+public class PlayerFactory {
 
     public static Player createPlayer(String name){
         String indicator = name.substring(0,8);
         if (name.equals(indicator)){
-            return new AIplayer(indicator);
+            return new AIPlayer();
         }else {
-            return new HumanPlayer(indicator);
+            return new HumanPlayer();
         }
 
 
