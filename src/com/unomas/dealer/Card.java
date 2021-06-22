@@ -56,7 +56,7 @@ public class Card {
                 '}';
     }
 
-    enum CardColor{
+    public enum CardColor{
         RED,
         YELLOW,
         BLUE,

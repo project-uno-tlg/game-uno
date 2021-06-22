@@ -4,12 +4,11 @@ import com.unomas.player.Player;
 
 public class PlayerFactory {
 
-    public static Player createPlayer(String name){
-        String indicator = name.substring(0,8);
-        if (name.equals(indicator)){
-            return new AIPlayer();
+    public static Player createPlayer(String name,  boolean isAI){
+        if (isAI){
+            return new AIPlayer(name, isAI);
         }else {
-            return new HumanPlayer();
+            return new HumanPlayer(name);
         }
 
 

@@ -1,6 +1,7 @@
 package com.unomas.dealer;
 
 import com.unomas.game.ScreenPrinter;
+import com.unomas.player.Player;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -10,13 +11,21 @@ public class DealerBot {
     private Deck deck;
     private int currentPlayerIndex;
     private Card cardToMatch;
+    private static DealerBot dealerBot;
 
     private DealerBot(List<Player> players){
         this.players = players;
     }
 
+    public static DealerBot getInstance() {
+        return dealerBot;
+    }
+
     public static DealerBot getInstance(List<Player> players){
-        return new DealerBot(players);
+        if(dealerBot == null) {
+            dealerBot = new DealerBot(players);
+        }
+        return dealerBot;
     }
 
 
@@ -88,11 +97,11 @@ public class DealerBot {
 
 
     private void distributeCard(Player player, Card card){
-        player.cardsInHand.add(card);
+        player.addCard(card);
     }
 
     public static int randomPlayer(int max){
-        return (int) (Math.random() * (max  + 1));
+        return (int) (Math.random() * max);
     }
 
     private void updateCurrentPlayer(){
@@ -106,40 +115,5 @@ public class DealerBot {
                 distributeCard(player, deck.drawOneCardFromDeck());
             }
         }
-    }
-
-
-
-
-
-    // remove it later on
-    // for testing purpose now
-    public static class Player{
-        String name;
-        List<Card> cardsInHand;
-        public Player(String name, List<Card> cardsInHand){
-            this.name = name;
-            this.cardsInHand = cardsInHand;
-        }
-
-        public boolean checkCard (Card card){
-            return true;
-        }
-        public Card playCard(){
-            return null;
-        }
-        public List<Card> getCardsInHand(){
-            return cardsInHand;
-        }
-        public String getName(){
-            return name;
-        }
-        public void addCard(Card card){
-            cardsInHand.add(card);
-        }
-        public boolean isAI(){
-            return true;
-        }
-
     }
 }

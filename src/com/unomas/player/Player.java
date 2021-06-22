@@ -1,7 +1,6 @@
 package com.unomas.player;
 
 import com.unomas.dealer.Card;
-import com.unomas.dealer.Deck;
 import com.unomas.dealer.DealerBot;
 
 import java.awt.*;
@@ -11,25 +10,24 @@ import java.util.List;
 public abstract class Player{
 
     //FIELDS
-    List<Card> cardsInHand;
-    String name;
-    boolean isAI;
+    public List<Card> cardsInHand = new ArrayList<>();
+    public String name;
+    public boolean isAI = false;
 
 
     //CONSTRUCTORS
-    public Player() {
-        //no arg constructor
+    public Player(String name) {
+        this.name = name;
     }
 
-    public Player(List<Card> cardsInHand, String name, boolean isAI) {
-        this.cardsInHand = cardsInHand;
+    public Player(String name, boolean isAI) {
         this.name = name;
         this.isAI = isAI;
 
     }
 
     //BEHAVIORAL METHODS
-    public abstract Card playCard(Card cardToMatch, boolean hasValidCard, Card newCard, Card card, boolean isUserCardInHand);
+    public abstract Card playCard();
 
     public boolean checkCard(Card cardToMatch) {
         boolean hasValidCard = false;
