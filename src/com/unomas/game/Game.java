@@ -58,15 +58,16 @@ public class Game {
     }
 
     private void createAI(int count) {
+        int index = 1;
         List<Player> computerPlayers = new ArrayList<>();
         while (count > 0) {
-            players.add(PlayerFactory.createPlayer("computer" + count, true));
+            players.add(PlayerFactory.createPlayer("computer" + index, true));
             count--;
+            index++;
         }
     }
 
     private Player createRealPlayer(String name) {
-        Player humanPlayer = PlayerFactory.createPlayer(name, false);
-        return humanPlayer;
+        return PlayerFactory.createPlayer(name, false);
     }
 }
