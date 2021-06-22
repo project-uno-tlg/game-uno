@@ -58,22 +58,24 @@ public class DealerBot {
                 int cardLeftInDeck = deck.getAllCardsInDeck().size();
                 if (cardLeftInDeck == 0){
                     ScreenPrinter.gameOverDeckOutOfCard();
-                    return;
+                    System.exit(0);
                 }
                 // when the new drawing card is a match
                 if (currentPlayer.checkCard(newCard)){
-                    ScreenPrinter.playsCard(currentPlayer.getName(), newCard.getColor().toString(), newCard.getNumber());
+                    ScreenPrinter.playsCard(currentPlayer.getName(), newCard.getColor().toString(),
+                            newCard.getNumber(), currentPlayer.getCardsInHand().size());
                     cardToMatch = newCard;
                 }
                 // when it's not a match
                 else {
                     currentPlayer.addCard(newCard);
+                    ScreenPrinter.drawCard(currentPlayer.getName());
                 }
             }
             // if player want quit the game by playing quit card.
             else if (cardPlayed.wannaQuit()){
                 ScreenPrinter.gameOverPlayerQuit();
-                return;
+                System.exit(0);
             }
             // when player has matching card to play
             else {
@@ -83,7 +85,8 @@ public class DealerBot {
                     ScreenPrinter.gameOverWithWinner(currentPlayer.getName());
                     return;
                 }
-                ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed.getColor().toString(), cardPlayed.getNumber());
+                ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed.getColor().toString(),
+                        cardPlayed.getNumber(), currentPlayer.getCardsInHand().size());
                 cardToMatch = cardPlayed;
             }
             // in the end, update move to the next player.
@@ -95,7 +98,6 @@ public class DealerBot {
         return cardToMatch;
     }
 
-
     private void distributeCard(Player player, Card card){
         player.addCard(card);
     }
@@ -105,8 +107,11 @@ public class DealerBot {
     }
 
     private void updateCurrentPlayer(){
-        currentPlayerIndex = currentPlayerIndex + 1 >= players.size() ?
-                0 : currentPlayerIndex++;
+        if (currentPlayerIndex + 1 >= players.size()){
+            currentPlayerIndex = 0;
+        } else {
+            currentPlayerIndex++;
+        }
     }
 
     private void initDistributeCards(){

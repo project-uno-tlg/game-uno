@@ -24,12 +24,12 @@ class HumanPlayer extends Player {
         Card playedCard = null;        //initialize the card to be played that is prompted by the user
         Prompter prompter = new Prompter(new Scanner(System.in));
         String matchCard = "Match this card.";
-        String yourCards = "These are your cards.";
+        String yourCards = "You have " + cardsInHand.size() + " cards in hand";
         String infoText = "It is your turn. What card do you want to play?";
         String promptColorText = "Please enter the color of the card you want to play.";
         String promptNumberText = "Please enter the number of the card you want to play.";
         String retryText = "That is not a valid input. Please try again.";
-        String noValidCards = "There are no valid cards in your hand. You must draw a card.";
+//        String noValidCards = "There are no valid cards in your hand. You must draw a card.";
 
         String colorInput;
         String numberInput;
@@ -56,8 +56,20 @@ class HumanPlayer extends Player {
                     colorInput = prompter.prompt(promptColorText).toUpperCase();      //asks which color
                     numberInput = prompter.prompt(promptNumberText);    //asks which number
 
-                    Card.CardColor cardColor = Card.CardColor.valueOf(colorInput);      //converts the input string color to an enum
-                    int userInputNumber = Integer.parseInt(numberInput);                //converts the input string number to a int
+                    if (colorInput.equalsIgnoreCase("quit") || numberInput.equalsIgnoreCase("quit")) {
+                        playedCard = Card.getQuitCard();
+                        break;
+                    }
+                    int userInputNumber;
+                    Card.CardColor cardColor;
+                    try {
+                        cardColor = Card.CardColor.valueOf(colorInput);      //converts the input string color to an enum
+                        userInputNumber = Integer.parseInt(numberInput);
+                    }catch (IllegalArgumentException ignored){
+                        prompter.info(retryText);
+                        continue;
+                    }
+                           //converts the input string number to a int
 
                     boolean tracker = false;
                     for (Card card : cardsInHand) {
@@ -74,15 +86,10 @@ class HumanPlayer extends Player {
                         break;
                     }
 
-                    if (colorInput.equalsIgnoreCase("quit") || numberInput.equalsIgnoreCase("quit")) {
-                        playedCard = Card.getQuitCard();
-                        break;
-                    }
-
                     prompter.info(retryText);
                 }
                 else {          //if player does not have a hasValidCard have the dealer distribute a card to that player
-                    prompter.info(noValidCards);
+//                    prompter.info(noValidCards);
                     playedCard = null;
                     break;
                 }

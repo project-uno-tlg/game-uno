@@ -35,6 +35,7 @@ public abstract class Player{
         for(Card card : cardsInHand) {
             if (card.getColor() == cardToMatch.getColor() || card.getNumber() == cardToMatch.getNumber()) {
                 hasValidCard = true;
+                break;
             }
         }
         return hasValidCard;
