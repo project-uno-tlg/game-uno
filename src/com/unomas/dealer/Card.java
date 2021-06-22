@@ -1,6 +1,6 @@
 package com.unomas.dealer;
 
-class Card {
+public class Card {
 
     private CardColor color;
     private int number;

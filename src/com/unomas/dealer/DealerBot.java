@@ -3,7 +3,7 @@ package com.unomas.dealer;
 import java.util.Collection;
 import java.util.List;
 
-class DealerBot {
+public class DealerBot {
     private List<Player> players;
     private Deck deck;
     private int currentPlayerIndex;
