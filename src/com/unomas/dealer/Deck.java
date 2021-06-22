@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Deck {
+class Deck {
     private List<Card> cardsInDeck;
 
     private Deck(){};
