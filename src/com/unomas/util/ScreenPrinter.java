@@ -68,7 +68,9 @@ public class ScreenPrinter {
         for (int i = 0; i<cardsInHand.size(); i++){
             String cardColor = cardsInHand.get(i).getColor().toString();
             String textColor = convertCardColor(cardColor);
-            message.append("\n [ " + (i+1) + " ]  "  + textColor + cardColor + " " + cardsInHand.get(i).getNumber() + ANSI_WHITE);
+            String cardValue = (cardsInHand.get(i).getAction().equalsIgnoreCase("null")) ?
+                    String.valueOf(cardsInHand.get(i).getNumber()) : cardsInHand.get(i).getAction();
+            message.append("\n [ " + (i+1) + " ]  "  + textColor + cardColor + " " + cardValue + ANSI_WHITE);
         }
         System.out.println(message + ANSI_WHITE);
     }

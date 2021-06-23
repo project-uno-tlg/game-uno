@@ -18,7 +18,7 @@ public class Deck {
     // get a fresh deck of cards ready to play
     public void generateDeck(){
         generateRegularCards();
-//        generateReverseCards();
+        generateReverseCards();
 
         // shuffle the cards;
         Collections.shuffle(cardsInDeck);
