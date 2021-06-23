@@ -1,4 +1,4 @@
-package com.unomas.dealer;
+package com.unomas.model.cards;
 
 public class Card {
 
@@ -26,7 +26,6 @@ public class Card {
     public boolean wannaQuit(){
         return wannaQuit;
     }
-
 
     public CardColor getColor() {
         return color;

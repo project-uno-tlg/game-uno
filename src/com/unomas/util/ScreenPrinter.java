@@ -1,10 +1,8 @@
-package com.unomas.game;
+package com.unomas.util;
 
-import com.unomas.dealer.Card;
-import com.unomas.player.Player;
+import com.unomas.model.cards.Card;
 
 import java.util.List;
-import java.util.SortedMap;
 
 public class ScreenPrinter {
 
@@ -20,6 +18,8 @@ public class ScreenPrinter {
             "██║░░░██║██║╚████║██║░░██║  ██║╚██╔╝██║██╔══██║░╚═══██╗\n" +
             "╚██████╔╝██║░╚███║╚█████╔╝  ██║░╚═╝░██║██║░░██║██████╔╝\n" +
             "░╚═════╝░╚═╝░░╚══╝░╚════╝░  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░";
+
+    private ScreenPrinter(){};
 
     public static void welcome(){
         System.out.println("Welcome to \n" + ANSI_GREEN + uno + ANSI_WHITE);
@@ -56,11 +56,11 @@ public class ScreenPrinter {
     public static void showCardsInHand(List<Card> cardsInHand){
         StringBuilder message = new StringBuilder();
         message.append("You Have ").append(cardsInHand.size()).append(" cards, ");
-        cardsInHand.forEach(card -> {
-                    String cardColor = card.getColor().toString();
-                    String textColor = convertCardColor(cardColor);
-                    message.append(textColor + cardColor + " " + card.getNumber() + ", " );
-                });
+        for (int i = 0; i<cardsInHand.size(); i++){
+            String cardColor = cardsInHand.get(i).getColor().toString();
+            String textColor = convertCardColor(cardColor);
+            message.append("\n [ " + (i+1) + " ]  "  + textColor + cardColor + " " + cardsInHand.get(i).getNumber() + ANSI_WHITE);
+        }
         System.out.println(message + ANSI_WHITE);
     }
 

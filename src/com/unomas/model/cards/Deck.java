@@ -1,10 +1,10 @@
-package com.unomas.dealer;
+package com.unomas.model.cards;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class Deck {
+public class Deck {
     private List<Card> cardsInDeck;
 
     private Deck(){};
@@ -40,9 +40,14 @@ class Deck {
         return card;
     }
 
-    public List<Card> getAllCardsInDeck(){
-        return cardsInDeck;
+    public List<Card> getAllCardsInDeck() {
+        return Collections.unmodifiableList(cardsInDeck);
     }
+
+    public int getCardsCountInDeck(){
+        return cardsInDeck.size();
+    }
+
     private void setCardsInDeck(List<Card> cards){
         cardsInDeck = cards;
     }

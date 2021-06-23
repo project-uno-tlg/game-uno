@@ -1,35 +1,37 @@
-package com.unomas.dealer;
+package com.unomas.controller;
 
-import com.unomas.game.ScreenPrinter;
-import com.unomas.player.Player;
+import com.unomas.model.cards.Card;
+import com.unomas.model.cards.Deck;
+import com.unomas.util.ScreenPrinter;
+import com.unomas.model.player.Player;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class DealerBot {
+public class Dealer {
     private List<Player> players;
     private Deck deck;
     private int currentPlayerIndex;
     private Card cardToMatch;
-    private static DealerBot dealerBot;
+    private static Dealer dealerBot;
 
-    private DealerBot(List<Player> players){
+    private Dealer(List<Player> players){
         this.players = players;
     }
 
-    public static DealerBot getInstance() {
+    public static Dealer getInstance() {
         return dealerBot;
     }
 
-    public static DealerBot getInstance(List<Player> players){
+    public static Dealer getInstance(List<Player> players){
         if(dealerBot == null) {
-            dealerBot = new DealerBot(players);
+            dealerBot = new Dealer(players);
         }
         return dealerBot;
     }
 
 
-    public void init() throws InterruptedException {
+    public void init() {
         deck = Deck.getInstance();
         initDistributeCards();
         cardToMatch = deck.drawOneCardFromDeck();
@@ -37,7 +39,7 @@ public class DealerBot {
         startGame();
     }
 
-    private void startGame() throws InterruptedException {
+    private void startGame() {
 
         while ( true){
 
@@ -46,7 +48,10 @@ public class DealerBot {
 
             if (currentPlayer.isAI() ) {
                 // make computer player pause 3 sec before move
-                TimeUnit.SECONDS.sleep(2);
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                }catch (InterruptedException ignored){}
+
             } else {
                 // tell human player what card to match
                 ScreenPrinter.matchCard(cardToMatch.getColor().toString(), cardToMatch.getNumber());
@@ -60,7 +65,7 @@ public class DealerBot {
             if (cardPlayed == null){
 
                 Card newCard = deck.drawOneCardFromDeck();
-                int cardLeftInDeck = deck.getAllCardsInDeck().size();
+                int cardLeftInDeck = deck.getCardsCountInDeck();
                 if (cardLeftInDeck == 0){
                     ScreenPrinter.gameOverDeckOutOfCard();
                     System.exit(0);

@@ -1,11 +1,10 @@
-package com.unomas.player;
+package com.unomas.model.player;
 
-import com.unomas.dealer.Card;
-import com.unomas.dealer.DealerBot;
+import com.unomas.model.cards.Card;
+import com.unomas.controller.Dealer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 class AIPlayer extends Player {
 
@@ -20,7 +19,7 @@ class AIPlayer extends Player {
         Card playedCard;        //initialize the card to be played by the AI
         boolean hasValidCard;
 
-        Card cardToMatch = DealerBot.getInstance().getCardToMatch();
+        Card cardToMatch = Dealer.getInstance().getCardToMatch();
         hasValidCard = checkCard(cardToMatch);
 
         if (hasValidCard) { //assumes == true
