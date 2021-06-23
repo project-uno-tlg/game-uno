@@ -12,7 +12,6 @@ public abstract class Player{
     public String name;
     public boolean isAI = false;
 
-
     //CONSTRUCTORS
     public Player(String name) {
         this.name = name;
@@ -21,7 +20,6 @@ public abstract class Player{
     public Player(String name, boolean isAI) {
         this.name = name;
         this.isAI = isAI;
-
     }
 
     //BEHAVIORAL METHODS
