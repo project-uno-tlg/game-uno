@@ -29,6 +29,9 @@ public class Game {
     }
 
     public void setPlayerCount(int playerCount) {
+        if (playerCount <= 0){
+            quit();
+        }
         if (playerCount > MAX_PLAYER_COUNT) {
             System.out.println("Sorry only 6 players allowed. Setting up a game with 6 players...");
             this.playerCount = 5;
@@ -40,18 +43,14 @@ public class Game {
 
     // Business Methods
     public void quit() {
-        String exitText;
-        exitText = prompter.prompt("Type exit to exit game.");
-        if (exitText.toLowerCase().equals("exit")) {
-
-            System.exit(0);
-        }
+        prompter.info("Game Over GoodBye.");
+        System.exit(0);
     }
 
 
     public void start() {
         ScreenPrinter.welcome();
-        setPlayerCount(Integer.parseInt(prompter.prompt("How many computer players (1-5): ",
+        setPlayerCount(Integer.parseInt(prompter.prompt("How many computer players (1-6) \n"+"Entering 0 will exit the game : ",
                 "\\d+", "That is not a valid number!")));
         players.add(createRealPlayer(prompter.prompt("Type your name: ")));
         createAI(getPlayerCount());
@@ -69,6 +68,9 @@ public class Game {
     }
 
     private Player createRealPlayer(String name) {
+        if(name.equals("quit")){
+            quit();
+        }
         return PlayerFactory.createPlayer(name, false);
     }
 }

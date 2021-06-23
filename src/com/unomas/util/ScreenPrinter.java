@@ -23,6 +23,29 @@ public class ScreenPrinter {
 
     public static void welcome(){
         System.out.println("Welcome to \n" + ANSI_GREEN + uno + ANSI_WHITE);
+        System.out.println();
+        System.out.println("How to Play: " +
+                "\n1. Enter how many computer players you want to play with." +
+                "\n   You can only enter 1-6. If you enter more than 6 the system will enter 6 for you." +
+                "\n   0 or less will exit the game.\n" +
+                "\n" +
+                "2. Dealer will shuffles the cards, and randomly pick a player to start with, \n" +
+                "   and the send cards to the players one by one. ( 7 for each player) \n" +
+                "\n" +
+                "3. Then Dealer opens one card in deck as an indicator for the starter. \n" +
+                "\n" +
+                "4. The picked player’s turn started (Computer or Human).  Player must play a card that matches either a number or color.\n" +
+                "   If player does not have it, the system will draw one from the deck for you and place it in your deck. \n" +
+                "   If the drawn card is a match, " +"then the system will automatically play it; Or move to the next player. \n" +
+                "\n" +
+                "5. All players follow rule #4 and game keeps going and going. \n" +
+                "\n" +
+                "6. When any player is out of cards, that player wins the game.  \n" +
+                "\n" +
+                "7. In the end, someone wins the game, then the Dealer will ask whether you want to play again. \n" +
+                "   If yes, then the game will start with the next player after who won the game. \n" +
+                "\n" +
+                "9. At any time, the human player can call “quit” to stop the game. \n");
     }
 
     public static void gameOverWithWinner(String winner){
