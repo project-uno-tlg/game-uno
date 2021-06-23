@@ -2,7 +2,6 @@ package com.unomas.game;
 
 
 import com.apps.util.Prompter;
-//import com.unomas.dealer.DealerBot;
 import com.unomas.dealer.DealerBot;
 import com.unomas.player.Player;
 import com.unomas.player.PlayerFactory;
@@ -31,7 +30,8 @@ public class Game {
 
     public void setPlayerCount(int playerCount) {
         if (playerCount > MAX_PLAYER_COUNT) {
-            System.out.println("Sorry only 6 players allowed");
+            System.out.println("Sorry only 6 players allowed. Setting up a game with 6 players...");
+            this.playerCount = 5;
         } else {
             this.playerCount = playerCount;
         }
@@ -50,7 +50,8 @@ public class Game {
 
 
     public void start() throws InterruptedException {
-        setPlayerCount(Integer.parseInt(prompter.prompt("How many computer players: ",
+        ScreenPrinter.welcome();
+        setPlayerCount(Integer.parseInt(prompter.prompt("How many computer players (1-5): ",
                 "\\d+", "That is not a valid number!")));
         players.add(createRealPlayer(prompter.prompt("Type your name: ")));
         createAI(getPlayerCount());

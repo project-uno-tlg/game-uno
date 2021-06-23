@@ -23,9 +23,9 @@ class HumanPlayer extends Player {
 
         Card playedCard = null;        //initialize the card to be played that is prompted by the user
         Prompter prompter = new Prompter(new Scanner(System.in));
-        String matchCard = "Match this card.";
-        String yourCards = "You have " + cardsInHand.size() + " cards in hand";
-        String infoText = "It is your turn. What card do you want to play?";
+//        String matchCard = "Match this card.";
+//        String yourCards = "You have " + cardsInHand.size() + " cards in hand";
+        String infoText = "What card do you want to play?";
         String promptColorText = "Please enter the color of the card you want to play.";
         String promptNumberText = "Please enter the number of the card you want to play.";
         String retryText = "That is not a valid input. Please try again.";
@@ -46,8 +46,8 @@ class HumanPlayer extends Player {
             //if not
 
             while (true) {
-                prompter.info(matchCard + cardToMatch);
-                prompter.info(yourCards + cardsInHand);
+//                prompter.info(matchCard + cardToMatch);
+//                prompter.info(yourCards + cardsInHand);
 
                 hasValidCard = checkCard(cardToMatch);
                 if (hasValidCard) {

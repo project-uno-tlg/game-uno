@@ -41,11 +41,16 @@ public class DealerBot {
 
         while ( true){
 
+
             Player currentPlayer = players.get(currentPlayerIndex);
 
             if (currentPlayer.isAI() ) {
                 // make computer player pause 3 sec before move
-                TimeUnit.SECONDS.sleep(3);
+                TimeUnit.SECONDS.sleep(2);
+            } else {
+                // tell human player what card to match
+                ScreenPrinter.matchCard(cardToMatch.getColor().toString(), cardToMatch.getNumber());
+                ScreenPrinter.showCardsInHand(currentPlayer.getCardsInHand());
             }
 
             Card cardPlayed = currentPlayer.playCard();
@@ -62,6 +67,7 @@ public class DealerBot {
                 }
                 // when the new drawing card is a match
                 if (currentPlayer.checkCard(newCard)){
+                    ScreenPrinter.drawCard(currentPlayer.getName());
                     ScreenPrinter.playsCard(currentPlayer.getName(), newCard.getColor().toString(),
                             newCard.getNumber(), currentPlayer.getCardsInHand().size());
                     cardToMatch = newCard;
