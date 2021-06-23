@@ -81,8 +81,8 @@ public class ScreenPrinter {
         System.out.println("Game Over. Player quited game");
     }
 
-    public static void drawCard(String name){
-        System.out.println(name + " just draw one card.");
+    public static void drawCard(String name, String qty){
+        System.out.println(name + " draws " + qty + " card(s).");
     }
 
     public static void showCardsInHand(List<Card> cardsInHand){

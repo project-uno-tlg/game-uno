@@ -40,6 +40,7 @@ public class Dealer {
         initDistributeCards();
         cardToMatch = deck.drawOneCardFromDeck();
         currentPlayerIndex = randomPlayer(players.size());
+        currentPlayer = players.get(currentPlayerIndex);
         startGame();
     }
 
@@ -51,25 +52,59 @@ public class Dealer {
 
             Card cardPlayed = currentPlayer.playCard();
 
-            if (cardPlayed == null) {
-                processNullCard();
-            }
-            else if (cardPlayed.wannaQuit()){
-                ScreenPrinter.gameOverPlayerQuit();
-                gameOver = true;
-            }
-            else if ("null".equalsIgnoreCase(cardPlayed.getAction())){
-                processRegularCard(cardPlayed);
-            }
-            else if ( "REVERSE".equalsIgnoreCase(cardPlayed.getAction())){
-                processReverseCard(cardPlayed);
-            }
+            processCard(cardPlayed);
 
             // in the end, update move to the next player.
             updateCurrentPlayer();
 
             if (gameOver) {System.exit(0);}
         }
+    }
+
+    private void processCard(Card cardPlayed) {
+        if (cardPlayed == null) {
+            processNullCard();
+        }
+        else if (cardPlayed.wannaQuit()){
+            ScreenPrinter.gameOverPlayerQuit();
+            gameOver = true;
+        }
+        else {
+            switch (cardPlayed.getAction()){
+                case "null":
+                    processRegularCard(cardPlayed);
+                    break;
+                case "REVERSE":
+                    processReverseCard(cardPlayed);
+                    break;
+                case "SKIP":
+                    processSkipCard(cardPlayed);
+                    break;
+                case "+2":
+                    processDrawTwoCard(cardPlayed);
+                    break;
+            }
+        }
+    }
+
+    private void processDrawTwoCard(Card cardPlayed) {
+        ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed, currentPlayer.getCardsInHand().size());
+//        System.out.println("*******    current player before update: should play draw 2 " + currentPlayer.getName());
+        updateCurrentPlayer();
+//        System.out.println("*******    current player after update: should draw 2 " + currentPlayer.getName());
+
+        Card newCard1 = deck.drawOneCardFromDeck();
+        Card newCard2 = deck.drawOneCardFromDeck();
+        currentPlayer.addCard(newCard1);
+        currentPlayer.addCard(newCard2);
+        ScreenPrinter.drawCard(currentPlayer.getName(), "two");
+        cardToMatch = cardPlayed;
+    }
+
+    private void processSkipCard(Card cardPlayed) {
+        ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed, currentPlayer.getCardsInHand().size());
+        updateCurrentPlayer();
+        cardToMatch = cardPlayed;
     }
 
     private void processNullCard() {
@@ -87,17 +122,15 @@ public class Dealer {
                 newCard.getNumber() == cardToMatch.getNumber() ||
                 newCard.getAction().equalsIgnoreCase(cardToMatch.getAction()) && !newCard.getAction().equalsIgnoreCase("null")
         ){
-            ScreenPrinter.drawCard(currentPlayer.getName());
-            ScreenPrinter.playsCard(currentPlayer.getName(), newCard, currentPlayer.getCardsInHand().size());
-            cardToMatch = newCard;
+            ScreenPrinter.drawCard(currentPlayer.getName(), "one");
+            processCard(newCard);
         }
         // when it's not a match
         else {
             currentPlayer.addCard(newCard);
-            ScreenPrinter.drawCard(currentPlayer.getName());
+            ScreenPrinter.drawCard(currentPlayer.getName(), "one");
         }
     }
-
 
     private void processReverseCard(Card cardPlayed) {
         ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed, currentPlayer.getCardsInHand().size());
@@ -106,7 +139,6 @@ public class Dealer {
     }
 
     private void preparePlayer(){
-        currentPlayer = players.get(currentPlayerIndex);
 
         if (currentPlayer.isAI() ) {
             // make computer player pause 3 sec before move
@@ -174,7 +206,7 @@ public class Dealer {
                 currentPlayerIndex--;
             }
         }
-
+        currentPlayer = players.get(currentPlayerIndex);
     }
 
     private void initDistributeCards(){
