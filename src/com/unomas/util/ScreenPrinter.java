@@ -63,8 +63,7 @@ public class ScreenPrinter {
                 card.getAction();
 
         System.out.println( name + " played a " + textColor + cardColor + " " + cardValue + ANSI_WHITE + ", has " + leftInHand + " " +
-                "cards " +
-                "left" );
+                "cards left \n" );
     }
 
     public static void matchCard(Card card){
@@ -74,7 +73,7 @@ public class ScreenPrinter {
         String cardValue = (card.getAction().equalsIgnoreCase("null")) ? String.valueOf(card.getNumber()) :
                 card.getAction();
 
-        System.out.println("The Card you need to match is: " + textColor + cardColor + " " + cardValue + ANSI_WHITE);
+        System.out.println("The Card you need to match is: " + textColor + cardColor + " " + cardValue + ANSI_WHITE + "\n");
     }
 
     public static void gameOverPlayerQuit(){
@@ -82,7 +81,7 @@ public class ScreenPrinter {
     }
 
     public static void drawCard(String name, String qty){
-        System.out.println(name + " draws " + qty + " card(s).");
+        System.out.println(name + " draws " + qty + " card(s).\n");
     }
 
     public static void showCardsInHand(List<Card> cardsInHand){
@@ -95,7 +94,7 @@ public class ScreenPrinter {
                     String.valueOf(cardsInHand.get(i).getNumber()) : cardsInHand.get(i).getAction();
             message.append("\n [ " + (i+1) + " ]  "  + textColor + cardColor + " " + cardValue + ANSI_WHITE);
         }
-        System.out.println(message + ANSI_WHITE);
+        System.out.println(message + ANSI_WHITE + "\n");
     }
 
 
