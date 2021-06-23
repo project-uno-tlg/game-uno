@@ -1,10 +1,10 @@
-package com.unomas.game;
+package com.unomas.controller;
 
 
 import com.apps.util.Prompter;
-import com.unomas.dealer.DealerBot;
-import com.unomas.player.Player;
-import com.unomas.player.PlayerFactory;
+import com.unomas.model.player.Player;
+import com.unomas.model.player.PlayerFactory;
+import com.unomas.util.ScreenPrinter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,13 +49,13 @@ public class Game {
     }
 
 
-    public void start() throws InterruptedException {
+    public void start() {
         ScreenPrinter.welcome();
         setPlayerCount(Integer.parseInt(prompter.prompt("How many computer players (1-5): ",
                 "\\d+", "That is not a valid number!")));
         players.add(createRealPlayer(prompter.prompt("Type your name: ")));
         createAI(getPlayerCount());
-        DealerBot.getInstance(players).init();
+        Dealer.getInstance(players).init();
     }
 
     private void createAI(int count) {

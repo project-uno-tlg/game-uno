@@ -1,4 +1,4 @@
-package com.unomas.dealer;
+package com.unomas.model.cards;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +16,7 @@ public class DeckTest {
 
     @Test
     public void generateDeck_shouldCreateDeck_withEightyCards(){
-        assertEquals( 80, testDeck.getAllCardsInDeck().size());
+        assertEquals( 80, testDeck.getCardsCountInDeck());
     }
 
     @Test
@@ -35,7 +35,7 @@ public class DeckTest {
     @Test
     public void drawOneCardFromDeck_shouldReturnOneCard_andReduceCardInDeckQty(){
         Card card = testDeck.drawOneCardFromDeck();
-        assertEquals(79, testDeck.getAllCardsInDeck().size());
+        assertEquals(79, testDeck.getCardsCountInDeck());
     }
 
 }

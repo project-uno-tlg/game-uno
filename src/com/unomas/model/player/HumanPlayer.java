@@ -1,11 +1,9 @@
-package com.unomas.player;
+package com.unomas.model.player;
 
 import com.apps.util.Prompter;
-import com.unomas.dealer.Card;
-import com.unomas.dealer.DealerBot;
+import com.unomas.model.cards.Card;
+import com.unomas.controller.Dealer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 class HumanPlayer extends Player {
@@ -17,7 +15,7 @@ class HumanPlayer extends Player {
     @Override
     public Card playCard() {
 
-        Card cardToMatch = DealerBot.getInstance().getCardToMatch();
+        Card cardToMatch = Dealer.getInstance().getCardToMatch();
         boolean hasValidCard;
         boolean isUserCardInHand;
 

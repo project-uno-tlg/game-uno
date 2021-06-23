@@ -1,9 +1,7 @@
-package com.unomas.player;
+package com.unomas.model.player;
 
-import com.unomas.dealer.Card;
-import com.unomas.dealer.DealerBot;
+import com.unomas.model.cards.Card;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

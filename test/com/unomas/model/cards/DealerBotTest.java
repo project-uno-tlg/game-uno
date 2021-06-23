@@ -1,16 +1,16 @@
-package com.unomas.dealer;
+package com.unomas.model.cards;
 
-import com.unomas.player.Player;
+import com.unomas.controller.Dealer;
+import com.unomas.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class DealerBotTest {
     // update this later
     List<Player> players;
-    DealerBot dealerBot;
+    Dealer dealerBot;
 
     @Before
     public void init(){
@@ -33,7 +33,7 @@ public class DealerBotTest {
     @Test
     public void randomPlayer_returnsCorrectNumberInRange(){
         for (int i =0; i<20; i++){
-            System.out.println(DealerBot.randomPlayer(5));
+            System.out.println(Dealer.randomPlayer(5));
         }
 
     }
