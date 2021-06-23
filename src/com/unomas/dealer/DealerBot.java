@@ -86,14 +86,16 @@ public class DealerBot {
             // when player has matching card to play
             else {
                 int cardLeftInHand = currentPlayer.getCardsInHand().size();
+                ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed.getColor().toString(),
+                        cardPlayed.getNumber(), cardLeftInHand);
+                cardToMatch = cardPlayed;
+
                 // winning condition
                 if (cardLeftInHand == 0){
                     ScreenPrinter.gameOverWithWinner(currentPlayer.getName());
                     return;
                 }
-                ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed.getColor().toString(),
-                        cardPlayed.getNumber(), currentPlayer.getCardsInHand().size());
-                cardToMatch = cardPlayed;
+
             }
             // in the end, update move to the next player.
             updateCurrentPlayer();
