@@ -26,7 +26,7 @@ public class ScreenPrinter {
         System.out.println();
         System.out.println("How to Play: " +
                 "\n1. Enter how many computer players you want to play with." +
-                "\n   You can only enter 1-6. If you enter more than 6 the system will enter 6 for you." +
+                "\n   You can only enter 1-5. If you enter more than 5 the system will enter 5 for you." +
                 "\n   0 or less will exit the game.\n" +
                 "\n" +
                 "2. Dealer will shuffles the cards, and randomly pick a player to start with, \n" +

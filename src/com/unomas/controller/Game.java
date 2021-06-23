@@ -42,7 +42,7 @@ public class Game {
 
 
     // Business Methods
-    public void quit() {
+    private void quit() {
         prompter.info("Game Over GoodBye.");
         System.exit(0);
     }
