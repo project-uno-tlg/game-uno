@@ -1,4 +1,4 @@
-package com.unomas.model.cards;
+package com.unomas.controller;
 
 import com.unomas.controller.Dealer;
 import com.unomas.model.player.Player;
