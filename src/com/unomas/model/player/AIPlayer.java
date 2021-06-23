@@ -16,19 +16,15 @@ class AIPlayer extends Player {
     public Card playCard() {
         List<Card> playableCards = new ArrayList<>();
         int maxIndex = 0;
-        Card playedCard;        //initialize the card to be played by the AI
+        Card playedCard;
         boolean hasValidCard;
 
         Card cardToMatch = Dealer.getInstance().getCardToMatch();
         hasValidCard = checkCard(cardToMatch);
 
-        if (hasValidCard) { //assumes == true
-            //choose a random playable card to be placed down
-            //set cardToMatch equals to the chosen card
-            //output what card was played
-            //remove played card from cardsInHand
+        if (hasValidCard) {
             for (Card card : cardsInHand) {
-                if (card.getColor() == cardToMatch.getColor() || card.getNumber() == cardToMatch.getNumber()) { //card color == cardToMatch color || card number == cardToMatch number
+                if (card.getColor() == cardToMatch.getColor() || card.getNumber() == cardToMatch.getNumber()) {
                     playableCards.add(card);
                 }
             }
