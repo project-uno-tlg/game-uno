@@ -58,7 +58,7 @@ public class Dealer {
                 ScreenPrinter.gameOverPlayerQuit();
                 gameOver = true;
             }
-            else if (cardPlayed.getAction() == null){
+            else if ("null".equalsIgnoreCase(cardPlayed.getAction())){
                 processRegularCard(cardPlayed);
             }
             else if ( "REVERSE".equalsIgnoreCase(cardPlayed.getAction())){
@@ -85,7 +85,7 @@ public class Dealer {
         // if the new draw card is playable
         if (newCard.getColor() == cardToMatch.getColor() ||
                 newCard.getNumber() == cardToMatch.getNumber() ||
-                newCard.getAction().equalsIgnoreCase(cardToMatch.getAction())
+                newCard.getAction().equalsIgnoreCase(cardToMatch.getAction()) && !newCard.getAction().equalsIgnoreCase("null")
         ){
             ScreenPrinter.drawCard(currentPlayer.getName());
             ScreenPrinter.playsCard(currentPlayer.getName(), newCard, currentPlayer.getCardsInHand().size());
