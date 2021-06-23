@@ -36,7 +36,8 @@ public class ScreenPrinter {
     public static void playsCard(String name, Card card, int leftInHand){
         String cardColor = card.getColor().toString();
         String textColor = convertCardColor(cardColor);
-        String cardValue = (card.getAction() == null) ? String.valueOf(card.getNumber()) : card.getAction();
+        String cardValue = (card.getAction().equalsIgnoreCase("null")) ? String.valueOf(card.getNumber()) :
+                card.getAction();
 
         System.out.println( name + " played a " + textColor + cardColor + " " + cardValue + ANSI_WHITE + ", has " + leftInHand + " " +
                 "cards " +
@@ -47,7 +48,8 @@ public class ScreenPrinter {
 
         String cardColor = card.getColor().toString();
         String textColor = convertCardColor(cardColor);
-        String cardValue = (card.getAction() == null) ? String.valueOf(card.getNumber()) : card.getAction();
+        String cardValue = (card.getAction().equalsIgnoreCase("null")) ? String.valueOf(card.getNumber()) :
+                card.getAction();
 
         System.out.println("The Card you need to match is: " + textColor + cardColor + " " + cardValue + ANSI_WHITE);
     }
