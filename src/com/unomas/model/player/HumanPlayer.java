@@ -24,10 +24,16 @@ class HumanPlayer extends Player {
 //        String matchCard = "Match this card.";
 //        String yourCards = "You have " + cardsInHand.size() + " cards in hand";
         String infoText = "What card do you want to play?";
-        String promptColorText = "Please enter the color of the card you want to play.";
-        String promptNumberText = "Please enter the number of the card you want to play.";
+        String promptText = "Enter the number next to the card you want to play.";
         String retryText = "That is not a valid input. Please try again.";
+
+        //String promptColorText = "Please enter the color of the card you want to play.";
+        //String promptNumberText = "Please enter the number of the card you want to play.";
+
 //        String noValidCards = "There are no valid cards in your hand. You must draw a card.";
+
+
+        String cardInput;
 
         String colorInput;
         String numberInput;
@@ -51,18 +57,26 @@ class HumanPlayer extends Player {
                 if (hasValidCard) {
 
                     prompter.info(infoText);        //prompts the user that it is their turn and asks them to play a card
-                    colorInput = prompter.prompt(promptColorText).toUpperCase();      //asks which color
-                    numberInput = prompter.prompt(promptNumberText);    //asks which number
+                    cardInput = prompter.prompt(promptText);
 
-                    if (colorInput.equalsIgnoreCase("quit") || numberInput.equalsIgnoreCase("quit")) {
+
+                    //colorInput = prompter.prompt(promptColorText).toUpperCase();      //asks which color
+                    //numberInput = prompter.prompt(promptNumberText);    //asks which number
+
+                    if (cardInput.equalsIgnoreCase("quit")) { //colorInput.equalsIgnoreCase("quit") || numberInput.equalsIgnoreCase("quit")
                         playedCard = Card.getQuitCard();
                         break;
                     }
-                    int userInputNumber;
-                    Card.CardColor cardColor;
+
+                    int userCardInput;
+
+                    //int userInputNumber;
+                    //Card.CardColor cardColor;
                     try {
-                        cardColor = Card.CardColor.valueOf(colorInput);      //converts the input string color to an enum
-                        userInputNumber = Integer.parseInt(numberInput);
+                        userCardInput = Integer.parseInt(cardInput);
+
+                        //cardColor = Card.CardColor.valueOf(colorInput);      //converts the input string color to an enum
+                        //userInputNumber = Integer.parseInt(numberInput);
                     }catch (IllegalArgumentException ignored){
                         prompter.info(retryText);
                         continue;
@@ -71,10 +85,15 @@ class HumanPlayer extends Player {
 
                     boolean tracker = false;
                     for (Card card : cardsInHand) {
-                        isUserCardInHand = checkIfCardInHand(card, userInputNumber, cardColor);
-                        if (isUserCardInHand) {
-                            playedCard = card;
-                            cardsInHand.remove(card);
+                        //isUserCardInHand = checkIfCardInHand(card, userInputNumber, cardColor);     //change parameter to card and userCardInput
+                        Card promptedCard = cardsInHand.get(userCardInput - 1);
+                        //potentially not needed
+                        isUserCardInHand = checkIfCardInHand(card, promptedCard);
+
+                        boolean doesPromptedCardMatchCardToMatch = checkPromptedCard(cardToMatch, promptedCard);
+                        if (doesPromptedCardMatchCardToMatch) {
+                            playedCard = promptedCard;
+                            cardsInHand.remove(promptedCard);
                             tracker = true;
                             break;
                         }
@@ -84,7 +103,10 @@ class HumanPlayer extends Player {
                         break;
                     }
 
+
+
                     prompter.info(retryText);
+
                 }
                 else {          //if player does not have a hasValidCard have the dealer distribute a card to that player
 //                    prompter.info(noValidCards);
@@ -95,11 +117,26 @@ class HumanPlayer extends Player {
         return playedCard;
     }
 
-    public boolean checkIfCardInHand(Card card, int userInputNumber, Card.CardColor cardColor) {
+
+    //might not even need to checkIfCardInHand
+    public boolean checkIfCardInHand(Card card, Card promptedCard) {    //Card card, int userInputNumber, Card.CardColor cardColor
         boolean isUserCardInHand = false;
-        if (userInputNumber == card.getNumber() && cardColor == card.getColor()) {
+        //if (userInputNumber == card.getNumber() && cardColor == card.getColor()) {
+            //isUserCardInHand = true;
+        //}
+        if (promptedCard.getNumber() == card.getNumber() && promptedCard.getColor() == card.getColor()) {
             isUserCardInHand = true;
         }
+
         return isUserCardInHand;
     }
+
+    public boolean checkPromptedCard(Card cardToMatch, Card promptedCard) {
+        boolean doesPromptedCardMatch = false;
+        if(promptedCard.getNumber() == cardToMatch.getNumber() || promptedCard.getColor() == cardToMatch.getColor()) {
+            doesPromptedCardMatch = true;
+        }
+        return  doesPromptedCardMatch;
+    }
+
 }
