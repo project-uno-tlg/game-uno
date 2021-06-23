@@ -19,11 +19,11 @@ public class Deck {
     public void generateDeck(){
         generateRegularCards();
         generateReverseCards();
+        generateSkipCards();
+        generateDrawTwoCards();
 
         // shuffle the cards;
         Collections.shuffle(cardsInDeck);
-
-//        setCardsInDeck(deck);
     }
 
 
@@ -69,6 +69,28 @@ public class Deck {
         for (int i = 0; i<2; i++){
             for (Card.CardColor color : Card.CardColor.values()){
                 Card card = Card.getInstance(color, "REVERSE");
+                cardsInDeck.add(card);
+            }
+        }
+    }
+
+    private void generateSkipCards() {
+        // game has 8 skip cards, 2 for each color;
+
+        for (int i = 0; i<2; i++){
+            for (Card.CardColor color : Card.CardColor.values()){
+                Card card = Card.getInstance(color, "SKIP");
+                cardsInDeck.add(card);
+            }
+        }
+    }
+
+    private void generateDrawTwoCards() {
+        // game has 8 draw two cards, 2 for each color;
+
+        for (int i = 0; i<2; i++){
+            for (Card.CardColor color : Card.CardColor.values()){
+                Card card = Card.getInstance(color, "+2");
                 cardsInDeck.add(card);
             }
         }
