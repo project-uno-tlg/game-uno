@@ -2,6 +2,7 @@ package com.unomas.model.cards;
 
 public class Card {
 
+    private String action = "null";
     private CardColor color;
     private int number;
     private boolean wannaQuit = false;
@@ -11,12 +12,22 @@ public class Card {
         setNumber(number);
     }
 
+    private Card(CardColor color, String action){
+        setColor(color);
+        setAction(action);
+    }
+
+
     private Card(){
         this.wannaQuit = true;
     }
 
     public static Card getInstance(CardColor color, int number){
         return new Card(color, number);
+    }
+
+    public static Card getInstance(CardColor color, String action){
+        return new Card(color, action);
     }
 
     public static Card getQuitCard(){
@@ -34,6 +45,14 @@ public class Card {
     public void setColor(CardColor color) {
 
         this.color = color;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    private void setAction(String action) {
+        this.action = action;
     }
 
     public int getNumber() {

@@ -11,9 +11,13 @@ import java.util.concurrent.TimeUnit;
 public class Dealer {
     private List<Player> players;
     private Deck deck;
+    private Player currentPlayer;
     private int currentPlayerIndex;
     private Card cardToMatch;
     private static Dealer dealerBot;
+    private boolean gameOver = false;
+    private boolean isReversed = false;
+
 
     private Dealer(List<Player> players){
         this.players = players;
@@ -41,69 +45,104 @@ public class Dealer {
 
     private void startGame() {
 
-        while ( true){
+        while ( !gameOver ){
 
-
-            Player currentPlayer = players.get(currentPlayerIndex);
-
-            if (currentPlayer.isAI() ) {
-                // make computer player pause 3 sec before move
-                try {
-                    TimeUnit.SECONDS.sleep(2);
-                }catch (InterruptedException ignored){}
-
-            } else {
-                // tell human player what card to match
-                ScreenPrinter.matchCard(cardToMatch.getColor().toString(), cardToMatch.getNumber());
-                ScreenPrinter.showCardsInHand(currentPlayer.getCardsInHand());
-            }
+            preparePlayer();
 
             Card cardPlayed = currentPlayer.playCard();
 
-
-            // when player has no matching card to play
-            if (cardPlayed == null){
-
-                Card newCard = deck.drawOneCardFromDeck();
-                int cardLeftInDeck = deck.getCardsCountInDeck();
-                if (cardLeftInDeck == 0){
-                    ScreenPrinter.gameOverDeckOutOfCard();
-                    System.exit(0);
-                }
-                // when the new drawing card is a match
-                if (currentPlayer.checkCard(newCard)){
-                    ScreenPrinter.drawCard(currentPlayer.getName());
-                    ScreenPrinter.playsCard(currentPlayer.getName(), newCard.getColor().toString(),
-                            newCard.getNumber(), currentPlayer.getCardsInHand().size());
-                    cardToMatch = newCard;
-                }
-                // when it's not a match
-                else {
-                    currentPlayer.addCard(newCard);
-                    ScreenPrinter.drawCard(currentPlayer.getName());
-                }
+            if (cardPlayed == null) {
+                processNullCard();
             }
-            // if player want quit the game by playing quit card.
             else if (cardPlayed.wannaQuit()){
                 ScreenPrinter.gameOverPlayerQuit();
-                System.exit(0);
+                gameOver = true;
             }
-            // when player has matching card to play
-            else {
-                int cardLeftInHand = currentPlayer.getCardsInHand().size();
-                ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed.getColor().toString(),
-                        cardPlayed.getNumber(), cardLeftInHand);
-                cardToMatch = cardPlayed;
-
-                // winning condition
-                if (cardLeftInHand == 0){
-                    ScreenPrinter.gameOverWithWinner(currentPlayer.getName());
-                    return;
-                }
-
+            else if (cardPlayed.getAction() == null){
+                processRegularCard(cardPlayed);
             }
+            else if ( "REVERSE".equalsIgnoreCase(cardPlayed.getAction())){
+                processReverseCard(cardPlayed);
+            }
+
             // in the end, update move to the next player.
             updateCurrentPlayer();
+
+            if (gameOver) {System.exit(0);}
+        }
+    }
+
+    private void processNullCard() {
+        // when player has no matching card to play
+        Card newCard = deck.drawOneCardFromDeck();
+
+        checkCardCountInDeck(); // do this every time draw card from deck. game is over when deck is out of cards
+        // process the new drawing card is a match
+        processNewDrawCard(newCard);
+    }
+
+    private void processNewDrawCard(Card newCard) {
+        // if the new draw card is playable
+        if (newCard.getColor() == cardToMatch.getColor() ||
+                newCard.getNumber() == cardToMatch.getNumber() ||
+                newCard.getAction().equalsIgnoreCase(cardToMatch.getAction())
+        ){
+            ScreenPrinter.drawCard(currentPlayer.getName());
+            ScreenPrinter.playsCard(currentPlayer.getName(), newCard, currentPlayer.getCardsInHand().size());
+            cardToMatch = newCard;
+        }
+        // when it's not a match
+        else {
+            currentPlayer.addCard(newCard);
+            ScreenPrinter.drawCard(currentPlayer.getName());
+        }
+    }
+
+
+    private void processReverseCard(Card cardPlayed) {
+        ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed, currentPlayer.getCardsInHand().size());
+        isReversed = !isReversed;
+        cardToMatch = cardPlayed;
+    }
+
+    private void preparePlayer(){
+        currentPlayer = players.get(currentPlayerIndex);
+
+        if (currentPlayer.isAI() ) {
+            // make computer player pause 3 sec before move
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            }catch (InterruptedException ignored){}
+
+        } else {
+            // tell human player what card to match and show cards in hand
+            ScreenPrinter.matchCard(cardToMatch);
+            ScreenPrinter.showCardsInHand(currentPlayer.getCardsInHand());
+        }
+    }
+
+    private void processRegularCard(Card cardPlayed){
+
+        // when player has matching card to play
+        ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed, currentPlayer.getCardsInHand().size());
+        cardToMatch = cardPlayed;
+        // check how many cards left in player's hand for winning condition, if 0, player wins
+        checkCardCountInHand();
+    }
+
+    private void checkCardCountInHand() {
+        int cardLeftInHand = currentPlayer.getCardsInHand().size();
+        if (cardLeftInHand == 0){
+            ScreenPrinter.gameOverWithWinner(currentPlayer.getName());
+            gameOver = true;
+        }
+    }
+
+    private void checkCardCountInDeck() {
+        int cardLeftInDeck = deck.getCardsCountInDeck();
+        if (cardLeftInDeck == 0){
+            ScreenPrinter.gameOverDeckOutOfCard();
+            gameOver = true;
         }
     }
 
@@ -120,11 +159,22 @@ public class Dealer {
     }
 
     private void updateCurrentPlayer(){
-        if (currentPlayerIndex + 1 >= players.size()){
-            currentPlayerIndex = 0;
+        if (!isReversed){
+            // regular game sequence, index goes up
+            if (currentPlayerIndex + 1 >= players.size()){
+                currentPlayerIndex = 0;
+            } else {
+                currentPlayerIndex++;
+            }
         } else {
-            currentPlayerIndex++;
+            // in reversed game sequence, index goes down
+            if (currentPlayerIndex == 0){
+                currentPlayerIndex = players.size()-1;
+            } else {
+                currentPlayerIndex--;
+            }
         }
+
     }
 
     private void initDistributeCards(){

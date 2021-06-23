@@ -33,16 +33,23 @@ public class ScreenPrinter {
         System.out.println("Game Over! We're out of card");
     }
 
-    public static void playsCard(String name, String color, int number, int leftInHand){
-        String cardColor = convertCardColor(color);
+    public static void playsCard(String name, Card card, int leftInHand){
+        String cardColor = card.getColor().toString();
+        String textColor = convertCardColor(cardColor);
+        String cardValue = (card.getAction() == null) ? String.valueOf(card.getNumber()) : card.getAction();
 
-        System.out.println( name + " played a " + cardColor + color + " " + number + ANSI_WHITE + ", has " + leftInHand + " cards " +
+        System.out.println( name + " played a " + textColor + cardColor + " " + cardValue + ANSI_WHITE + ", has " + leftInHand + " " +
+                "cards " +
                 "left" );
     }
 
-    public static void matchCard(String color, int number){
-        String cardColor = convertCardColor(color);
-        System.out.println("The Card you need to match is: " + cardColor + color + " " + number + ANSI_WHITE);
+    public static void matchCard(Card card){
+
+        String cardColor = card.getColor().toString();
+        String textColor = convertCardColor(cardColor);
+        String cardValue = (card.getAction() == null) ? String.valueOf(card.getNumber()) : card.getAction();
+
+        System.out.println("The Card you need to match is: " + textColor + cardColor + " " + cardValue + ANSI_WHITE);
     }
 
     public static void gameOverPlayerQuit(){
@@ -55,7 +62,7 @@ public class ScreenPrinter {
 
     public static void showCardsInHand(List<Card> cardsInHand){
         StringBuilder message = new StringBuilder();
-        message.append("You Have ").append(cardsInHand.size()).append(" cards, ");
+        message.append("You Have ").append(cardsInHand.size()).append(" cards: ");
         for (int i = 0; i<cardsInHand.size(); i++){
             String cardColor = cardsInHand.get(i).getColor().toString();
             String textColor = convertCardColor(cardColor);

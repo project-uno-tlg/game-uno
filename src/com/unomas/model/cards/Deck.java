@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Deck {
-    private List<Card> cardsInDeck;
+    private List<Card> cardsInDeck = new ArrayList<>();
 
     private Deck(){};
 
@@ -17,20 +17,13 @@ public class Deck {
 
     // get a fresh deck of cards ready to play
     public void generateDeck(){
-        List<Card> deck = new ArrayList<>();
-        // get one set of cards
-        for (Card.CardColor color : Card.CardColor.values()){
-            for (int i = 0; i<=9; i++){
-                Card card = Card.getInstance(color, i);
-                deck.add(card);
-            }
-        }
-        // double the set of cards
-        deck.addAll(deck);
-        // shuffle the cards;
-        Collections.shuffle(deck);
+        generateRegularCards();
+//        generateReverseCards();
 
-        setCardsInDeck(deck);
+        // shuffle the cards;
+        Collections.shuffle(cardsInDeck);
+
+//        setCardsInDeck(deck);
     }
 
 
@@ -51,4 +44,34 @@ public class Deck {
     private void setCardsInDeck(List<Card> cards){
         cardsInDeck = cards;
     }
+
+    private void generateRegularCards(){
+        // game has 76 regular cards
+        // add two sets of regular 1-9 cards to deck
+        for ( int i = 0; i<2; i++){
+            for (Card.CardColor color : Card.CardColor.values()){
+                for (int j = 1; j<=9; j++){
+                    Card card = Card.getInstance(color, j);
+                    cardsInDeck.add(card);
+                }
+            }
+        }
+        // add fou4 0 number cards to the deck
+        for ( Card.CardColor color : Card.CardColor.values()){
+            Card card = Card.getInstance(color, 0);
+            cardsInDeck.add(card);
+        }
+    }
+
+    private void generateReverseCards(){
+        // game has 8 reverse cards, 2 for each color;
+
+        for (int i = 0; i<2; i++){
+            for (Card.CardColor color : Card.CardColor.values()){
+                Card card = Card.getInstance(color, "REVERSE");
+                cardsInDeck.add(card);
+            }
+        }
+    }
+
 }
