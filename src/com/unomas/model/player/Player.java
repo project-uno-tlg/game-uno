@@ -1,9 +1,7 @@
-package com.unomas.player;
+package com.unomas.model.player;
 
-import com.unomas.dealer.Card;
-import com.unomas.dealer.DealerBot;
+import com.unomas.model.cards.Card;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +12,6 @@ public abstract class Player{
     public String name;
     public boolean isAI = false;
 
-
     //CONSTRUCTORS
     public Player(String name) {
         this.name = name;
@@ -23,7 +20,6 @@ public abstract class Player{
     public Player(String name, boolean isAI) {
         this.name = name;
         this.isAI = isAI;
-
     }
 
     //BEHAVIORAL METHODS
@@ -33,7 +29,15 @@ public abstract class Player{
         boolean hasValidCard = false;
 
         for(Card card : cardsInHand) {
-            if (card.getColor() == cardToMatch.getColor() || card.getNumber() == cardToMatch.getNumber()) {
+            if (card.getColor() == cardToMatch.getColor() ||
+                    card.getNumber() == cardToMatch.getNumber() && card.getNumber() != -1 ||
+                    card.getAction().equalsIgnoreCase(cardToMatch.getAction()) &&
+                            !"null".equalsIgnoreCase(cardToMatch.getAction()) ||
+                    "WILD".equalsIgnoreCase(cardToMatch.getAction()) ||
+                    "WILD".equalsIgnoreCase(card.getAction()) ||
+                    "WILD+4".equalsIgnoreCase(cardToMatch.getAction()) ||
+                    "WILD+4".equalsIgnoreCase(card.getAction())
+            ){
                 hasValidCard = true;
                 break;
             }

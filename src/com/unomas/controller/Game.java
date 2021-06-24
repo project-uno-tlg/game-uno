@@ -1,10 +1,10 @@
-package com.unomas.game;
+package com.unomas.controller;
 
 
 import com.apps.util.Prompter;
-import com.unomas.dealer.DealerBot;
-import com.unomas.player.Player;
-import com.unomas.player.PlayerFactory;
+import com.unomas.model.player.Player;
+import com.unomas.model.player.PlayerFactory;
+import com.unomas.util.ScreenPrinter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,9 @@ public class Game {
     }
 
     public void setPlayerCount(int playerCount) {
+        if (playerCount <= 0){
+            quit();
+        }
         if (playerCount > MAX_PLAYER_COUNT) {
             System.out.println("Sorry only 6 players allowed. Setting up a game with 6 players...");
             this.playerCount = 5;
@@ -37,25 +40,19 @@ public class Game {
         }
     }
 
-
     // Business Methods
-    public void quit() {
-        String exitText;
-        exitText = prompter.prompt("Type exit to exit game.");
-        if (exitText.toLowerCase().equals("exit")) {
-
-            System.exit(0);
-        }
+    private void quit() {
+        prompter.info("Game Over GoodBye.");
+        System.exit(0);
     }
 
-
-    public void start() throws InterruptedException {
+    public void start() {
         ScreenPrinter.welcome();
-        setPlayerCount(Integer.parseInt(prompter.prompt("How many computer players (1-5): ",
+        setPlayerCount(Integer.parseInt(prompter.prompt("How many computer players (1-6) \n"+"Entering 0 will exit the game : ",
                 "\\d+", "That is not a valid number!")));
         players.add(createRealPlayer(prompter.prompt("Type your name: ")));
         createAI(getPlayerCount());
-        DealerBot.getInstance(players).init();
+        Dealer.getInstance(players).init();
     }
 
     private void createAI(int count) {
@@ -69,6 +66,9 @@ public class Game {
     }
 
     private Player createRealPlayer(String name) {
+        if(name.equals("quit")){
+            quit();
+        }
         return PlayerFactory.createPlayer(name, false);
     }
 }
