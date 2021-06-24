@@ -23,6 +23,7 @@ public class Dealer {
         this.players = players;
     }
 
+    // let's do business
     public static Dealer getInstance() {
         return dealerBot;
     }
@@ -34,15 +35,22 @@ public class Dealer {
         return dealerBot;
     }
 
-
     public void init() {
         deck = Deck.getInstance();
         initDistributeCards();
         cardToMatch = deck.drawOneCardFromDeck();
         currentPlayerIndex = randomPlayer(players.size());
         currentPlayer = players.get(currentPlayerIndex);
+        // clear console magic, only works for Mac / linux
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        ScreenPrinter.matchCard(cardToMatch);
         startGame();
     }
+
+
+
+
 
     private void startGame() {
 
@@ -52,7 +60,7 @@ public class Dealer {
 
             Card cardPlayed = currentPlayer.playCard();
 
-            processCard(cardPlayed);
+            processCard(cardPlayed, false);
 
             // in the end, update move to the next player.
             updateCurrentPlayer();
@@ -61,7 +69,8 @@ public class Dealer {
         }
     }
 
-    private void processCard(Card cardPlayed) {
+    private void processCard(Card cardPlayed, boolean drawFour) {
+
         if (cardPlayed == null) {
             processNullCard();
         }
@@ -83,21 +92,63 @@ public class Dealer {
                 case "+2":
                     processDrawTwoCard(cardPlayed);
                     break;
+                case "WILD":
+                    processWildCard(cardPlayed);
+                    break;
+                case "WILD+4":
+                    processWildDrawFourCard(cardPlayed);
+                    break;
             }
         }
+        // check how many cards left in player's hand for winning condition, if 0, player wins
+        checkCardCountInHand();
+        // if this is called inside of a processDrawFourCard
+        if (drawFour){ updateCurrentPlayer();}
+    }
+
+    private void processWildDrawFourCard(Card cardPlayed) {
+        ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed, currentPlayer.getCardsInHand().size());
+
+        int poorGuysIndex = getPoorGuysIndex();
+        Player poorGuy = players.get(poorGuysIndex);
+
+        for (int i=0; i<4; i++){
+            Card newCard = deck.drawOneCardFromDeck();
+            poorGuy.addCard(newCard);
+        }
+        ScreenPrinter.drawCard(poorGuy, "four");
+
+        cardToMatch = cardPlayed;
+
+        preparePlayer();
+
+        Card newCardToPlay = currentPlayer.playCard();
+
+        processCard(newCardToPlay, true);
+
+        ScreenPrinter.skipPlayer(poorGuy.getName());
+    }
+
+    private void processWildCard(Card cardPlayed) {
+        ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed, currentPlayer.getCardsInHand().size());
+        cardToMatch = cardPlayed;
+        preparePlayer();
+
+        Card newCardToPlay = currentPlayer.playCard();
+
+        processCard(newCardToPlay, false);
     }
 
     private void processDrawTwoCard(Card cardPlayed) {
         ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed, currentPlayer.getCardsInHand().size());
-//        System.out.println("*******    current player before update: should play draw 2 " + currentPlayer.getName());
+        // skip next player
         updateCurrentPlayer();
-//        System.out.println("*******    current player after update: should draw 2 " + currentPlayer.getName());
 
         Card newCard1 = deck.drawOneCardFromDeck();
         Card newCard2 = deck.drawOneCardFromDeck();
         currentPlayer.addCard(newCard1);
         currentPlayer.addCard(newCard2);
-        ScreenPrinter.drawCard(currentPlayer.getName(), "two");
+        ScreenPrinter.drawCard(currentPlayer, "two");
         cardToMatch = cardPlayed;
     }
 
@@ -105,6 +156,7 @@ public class Dealer {
         ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed, currentPlayer.getCardsInHand().size());
         updateCurrentPlayer();
         cardToMatch = cardPlayed;
+        ScreenPrinter.skipPlayer(currentPlayer.getName());
     }
 
     private void processNullCard() {
@@ -119,16 +171,21 @@ public class Dealer {
     private void processNewDrawCard(Card newCard) {
         // if the new draw card is playable
         if (newCard.getColor() == cardToMatch.getColor() ||
-                newCard.getNumber() == cardToMatch.getNumber() ||
-                newCard.getAction().equalsIgnoreCase(cardToMatch.getAction()) && !newCard.getAction().equalsIgnoreCase("null")
+                newCard.getNumber() == cardToMatch.getNumber() && newCard.getNumber() != -1 ||
+                newCard.getAction().equalsIgnoreCase(cardToMatch.getAction()) &&
+                        !newCard.getAction().equalsIgnoreCase("null") ||
+                "WILD".equalsIgnoreCase(cardToMatch.getAction()) ||
+                "WILD".equalsIgnoreCase(newCard.getAction()) ||
+                "WILD+4".equalsIgnoreCase(cardToMatch.getAction()) ||
+                "WILD+4".equalsIgnoreCase(newCard.getAction())
         ){
-            ScreenPrinter.drawCard(currentPlayer.getName(), "one");
-            processCard(newCard);
+            ScreenPrinter.drawCard(currentPlayer, "one");
+            processCard(newCard, false);
         }
         // when it's not a match
         else {
             currentPlayer.addCard(newCard);
-            ScreenPrinter.drawCard(currentPlayer.getName(), "one");
+            ScreenPrinter.drawCard(currentPlayer, "one");
         }
     }
 
@@ -158,8 +215,6 @@ public class Dealer {
         // when player has matching card to play
         ScreenPrinter.playsCard(currentPlayer.getName(), cardPlayed, currentPlayer.getCardsInHand().size());
         cardToMatch = cardPlayed;
-        // check how many cards left in player's hand for winning condition, if 0, player wins
-        checkCardCountInHand();
     }
 
     private void checkCardCountInHand() {
@@ -207,6 +262,26 @@ public class Dealer {
             }
         }
         currentPlayer = players.get(currentPlayerIndex);
+    }
+
+    private int getPoorGuysIndex(){
+        int poorGuysIndex;
+        if (!isReversed){
+            // regular game sequence, index goes up
+            if (currentPlayerIndex + 1 >= players.size()){
+                poorGuysIndex = 0;
+            } else {
+                poorGuysIndex = currentPlayerIndex+1;
+            }
+        } else {
+            // in reversed game sequence, index goes down
+            if (currentPlayerIndex == 0){
+                poorGuysIndex = players.size()-1;
+            } else {
+                poorGuysIndex = currentPlayerIndex-1;
+            }
+        }
+        return poorGuysIndex;
     }
 
     private void initDistributeCards(){

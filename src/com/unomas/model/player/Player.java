@@ -29,7 +29,15 @@ public abstract class Player{
         boolean hasValidCard = false;
 
         for(Card card : cardsInHand) {
-            if (card.getColor() == cardToMatch.getColor() || card.getNumber() == cardToMatch.getNumber()) {
+            if (card.getColor() == cardToMatch.getColor() ||
+                    card.getNumber() == cardToMatch.getNumber() && card.getNumber() != -1 ||
+                    card.getAction().equalsIgnoreCase(cardToMatch.getAction()) &&
+                            !"null".equalsIgnoreCase(cardToMatch.getAction()) ||
+                    "WILD".equalsIgnoreCase(cardToMatch.getAction()) ||
+                    "WILD".equalsIgnoreCase(card.getAction()) ||
+                    "WILD+4".equalsIgnoreCase(cardToMatch.getAction()) ||
+                    "WILD+4".equalsIgnoreCase(card.getAction())
+            ){
                 hasValidCard = true;
                 break;
             }
