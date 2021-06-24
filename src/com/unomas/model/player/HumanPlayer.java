@@ -42,7 +42,7 @@ class HumanPlayer extends Player {
                     Card promptedCard;
                     try {
                         userCardInput = Integer.parseInt(cardInput);
-                        promptedCard = cardsInHand.get(userCardInput - 1);
+                        promptedCard = getCardsInHand().get(userCardInput - 1);
                     }catch (Exception ignored){
                         prompter.info(retryText);
                         continue;
@@ -51,7 +51,7 @@ class HumanPlayer extends Player {
                     boolean doesPromptedCardMatchCardToMatch = checkPromptedCard(cardToMatch, promptedCard);
                     if (doesPromptedCardMatchCardToMatch) {
                         playedCard = promptedCard;
-                        cardsInHand.remove(promptedCard);
+                        getCardsInHand().remove(promptedCard);
                         break;
                     }
 

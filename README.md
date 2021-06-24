@@ -4,6 +4,7 @@ UNO Mas – we develop the best UNO game you could ever play.
 
 This is a command line application that let’s you play UNO with certain numbers of AIs.
 
+Please use a terminal supports ANSI color code to run this application.
 
 ## Goals 
 

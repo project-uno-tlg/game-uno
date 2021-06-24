@@ -2,8 +2,6 @@ package com.unomas.model.player;
 
 import com.unomas.model.cards.Card;
 import com.unomas.controller.Dealer;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +23,7 @@ class AIPlayer extends Player {
 
         if (hasValidCard) {
 
-            playableCards = cardsInHand.stream()
+            playableCards = getCardsInHand().stream()
                     .filter(card -> card.getColor() == cardToMatch.getColor() ||
                             card.getNumber() == cardToMatch.getNumber() && card.getNumber() != -1 ||
                             card.getAction().equalsIgnoreCase(cardToMatch.getAction()) &&
@@ -39,7 +37,7 @@ class AIPlayer extends Player {
 
             maxIndex = playableCards.size();
             playedCard = playableCards.get((int) (Math.random() * (maxIndex)));
-            cardsInHand.remove(playedCard);
+            getCardsInHand().remove(playedCard);
         }
         else {          //if player does not have a hasValidCard have the dealer distribute a card to that player
             playedCard = null;

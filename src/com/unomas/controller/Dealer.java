@@ -48,10 +48,6 @@ public class Dealer {
         startGame();
     }
 
-
-
-
-
     private void startGame() {
 
         while ( !gameOver ){
@@ -62,7 +58,7 @@ public class Dealer {
 
             processCard(cardPlayed, false);
 
-            // in the end, update move to the next player.
+            // in the end,  move to the next player.
             updateCurrentPlayer();
 
             if (gameOver) {System.exit(0);}
@@ -222,6 +218,7 @@ public class Dealer {
         if (cardLeftInHand == 0){
             ScreenPrinter.gameOverWithWinner(currentPlayer.getName());
             gameOver = true;
+            System.exit(0);
         }
     }
 
@@ -230,6 +227,7 @@ public class Dealer {
         if (cardLeftInDeck == 0){
             ScreenPrinter.gameOverDeckOutOfCard();
             gameOver = true;
+            System.exit(0);
         }
     }
 
