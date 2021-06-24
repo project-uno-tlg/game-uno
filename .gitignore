@@ -2,6 +2,10 @@
 .idea/
 *.iml
 
+# MacOS stuff
+.DS_Store
+
+
 # Compiled class file
 *.class
 
