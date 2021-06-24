@@ -19,9 +19,8 @@ class HumanPlayer extends Player {
         boolean hasValidCard;
         Card playedCard = null;        //initialize the card to be played that is prompted by the user
         Prompter prompter = new Prompter(new Scanner(System.in));
-        String infoText = "What card do you want to play?";
-        String promptText = "Enter the number next to the card you want to play.";
-        String retryText = "That is not a valid input. Please try again.";
+        String promptText = "Enter the [ number ] of card you want to play : ";
+        String retryText = "That is not a valid input. Please try again.\n";
 
         String cardInput;
 
@@ -31,7 +30,7 @@ class HumanPlayer extends Player {
 
                 if (hasValidCard) {
 
-                    prompter.info(infoText);        //prompts the user that it is their turn and asks them to play a card
+                     //prompts the user that it is their turn and asks them to play a card
                     cardInput = prompter.prompt(promptText);
 
                     if ("quit".equalsIgnoreCase(cardInput)) {
@@ -40,14 +39,15 @@ class HumanPlayer extends Player {
                     }
 
                     int userCardInput;
+                    Card promptedCard;
                     try {
                         userCardInput = Integer.parseInt(cardInput);
-                    }catch (IllegalArgumentException ignored){
+                        promptedCard = cardsInHand.get(userCardInput - 1);
+                    }catch (Exception ignored){
                         prompter.info(retryText);
                         continue;
                     }
 
-                    Card promptedCard = cardsInHand.get(userCardInput - 1);
                     boolean doesPromptedCardMatchCardToMatch = checkPromptedCard(cardToMatch, promptedCard);
                     if (doesPromptedCardMatchCardToMatch) {
                         playedCard = promptedCard;
@@ -71,7 +71,11 @@ class HumanPlayer extends Player {
         if(promptedCard.getNumber() == cardToMatch.getNumber() ||
                 promptedCard.getColor() == cardToMatch.getColor() ||
                 promptedCard.getAction().equalsIgnoreCase(cardToMatch.getAction()) &&
-                        !"null".equalsIgnoreCase(promptedCard.getAction())
+                        !"null".equalsIgnoreCase(promptedCard.getAction()) ||
+                "WILD".equalsIgnoreCase(promptedCard.getAction()) ||
+                "WILD".equalsIgnoreCase(cardToMatch.getAction()) ||
+                "WILD+4".equalsIgnoreCase(promptedCard.getAction()) ||
+                "WILD+4".equalsIgnoreCase(cardToMatch.getAction())
         ) {
             doesPromptedCardMatch = true;
         }

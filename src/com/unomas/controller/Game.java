@@ -40,13 +40,11 @@ public class Game {
         }
     }
 
-
     // Business Methods
     private void quit() {
         prompter.info("Game Over GoodBye.");
         System.exit(0);
     }
-
 
     public void start() {
         ScreenPrinter.welcome();

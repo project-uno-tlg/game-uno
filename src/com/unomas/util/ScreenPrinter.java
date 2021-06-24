@@ -1,6 +1,7 @@
 package com.unomas.util;
 
 import com.unomas.model.cards.Card;
+import com.unomas.model.player.Player;
 
 import java.util.List;
 
@@ -12,18 +13,36 @@ public class ScreenPrinter {
     public static final String ANSI_BLUE   = "\u001B[94m";
     public static final String ANSI_WHITE  = "\u001B[97m";
     public static final String uno = "\n" +
-            "██╗░░░██╗███╗░░██╗░█████╗░  ███╗░░░███╗░█████╗░░██████╗\n" +
-            "██║░░░██║████╗░██║██╔══██╗  ████╗░████║██╔══██╗██╔════╝\n" +
-            "██║░░░██║██╔██╗██║██║░░██║  ██╔████╔██║███████║╚█████╗░\n" +
-            "██║░░░██║██║╚████║██║░░██║  ██║╚██╔╝██║██╔══██║░╚═══██╗\n" +
-            "╚██████╔╝██║░╚███║╚█████╔╝  ██║░╚═╝░██║██║░░██║██████╔╝\n" +
-            "░╚═════╝░╚═╝░░╚══╝░╚════╝░  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░";
+            "       ██╗░░░██╗███╗░░██╗░█████╗░  ███╗░░░███╗░█████╗░░██████╗\n" +
+            "       ██║░░░██║████╗░██║██╔══██╗  ████╗░████║██╔══██╗██╔════╝\n" +
+            "       ██║░░░██║██╔██╗██║██║░░██║  ██╔████╔██║███████║╚█████╗░\n" +
+            "       ██║░░░██║██║╚████║██║░░██║  ██║╚██╔╝██║██╔══██║░╚═══██╗\n" +
+            "       ╚██████╔╝██║░╚███║╚█████╔╝  ██║░╚═╝░██║██║░░██║██████╔╝\n" +
+            "       ░╚═════╝░╚═╝░░╚══╝░╚════╝░  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░";
+
+    public static final String gameOver = "\n" +
+        "       ░██████╗░░█████╗░███╗░░░███╗███████╗  ░█████╗░██╗░░░██╗███████╗██████╗░\n" +
+        "       ██╔════╝░██╔══██╗████╗░████║██╔════╝  ██╔══██╗██║░░░██║██╔════╝██╔══██╗\n" +
+        "       ██║░░██╗░███████║██╔████╔██║█████╗░░  ██║░░██║╚██╗░██╔╝█████╗░░██████╔╝\n" +
+        "       ██║░░╚██╗██╔══██║██║╚██╔╝██║██╔══╝░░  ██║░░██║░╚████╔╝░██╔══╝░░██╔══██╗\n" +
+        "       ╚██████╔╝██║░░██║██║░╚═╝░██║███████╗  ╚█████╔╝░░╚██╔╝░░███████╗██║░░██║\n" +
+        "       ░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝  ░╚════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝\n";
+
+    public static final String winner = "\n" +
+
+        "       █░█░█ █ █▄░█ █▄░█ █▀▀ █▀█   █ █▀\n" +
+        "       ▀▄▀▄▀ █ █░▀█ █░▀█ ██▄ █▀▄   █ ▄█";
 
     private ScreenPrinter(){};
 
     public static void welcome(){
-        System.out.println("Welcome to \n" + ANSI_GREEN + uno + ANSI_WHITE);
-        System.out.println();
+        // clear console magic only works for Mac / linux
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+
+
+        System.out.println(ANSI_GREEN + uno + ANSI_WHITE + "\n");
+        System.out.println("Welcome!! \n");
         System.out.println("How to Play: " +
                 "\n1. Enter how many computer players you want to play with." +
                 "\n   You can only enter 1-5. If you enter more than 5 the system will enter 5 for you." +
@@ -42,57 +61,99 @@ public class ScreenPrinter {
                 "\n" +
                 "6. When any player is out of cards, that player wins the game.  \n" +
                 "\n" +
-                "7. In the end, someone wins the game, then the Dealer will ask whether you want to play again. \n" +
-                "   If yes, then the game will start with the next player after who won the game. \n" +
-                "\n" +
-                "9. At any time, the human player can call “quit” to stop the game. \n");
+                "7. At any time, the human player can call “quit” to stop the game. \n");
     }
 
-    public static void gameOverWithWinner(String winner){
-        System.out.println("The Game is Over! Winner is " + winner);
+
+    public static void gameOverWithWinner(String player){
+        System.out.println(gameOver + winner + "        " +player);
     }
 
     public static void gameOverDeckOutOfCard(){
-        System.out.println("Game Over! We're out of card");
+        System.out.println(gameOver + "\n       Game Over! We're out of card");
     }
 
     public static void playsCard(String name, Card card, int leftInHand){
-        String cardColor = card.getColor().toString();
-        String textColor = convertCardColor(cardColor);
-        String cardValue = (card.getAction().equalsIgnoreCase("null")) ? String.valueOf(card.getNumber()) :
-                card.getAction();
 
-        System.out.println( name + " played a " + textColor + cardColor + " " + cardValue + ANSI_WHITE + ", has " + leftInHand + " " +
-                "cards left \n" );
+        String qtyColor = leftInHand < 2 ? ANSI_RED : ANSI_WHITE;
+
+        if ("WILD".equalsIgnoreCase(card.getAction())){
+            System.out.println(name + " played a " + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
+                    ANSI_RED + "L" + ANSI_YELLOW + "D" + ANSI_WHITE + " card, has " + qtyColor + leftInHand +
+                    ANSI_WHITE + " " + "cards left \n" );
+        }
+        else if ("WILD+4".equalsIgnoreCase(card.getAction())){
+            System.out.println(name + " played a " + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
+                    ANSI_RED + "L" + ANSI_YELLOW + "D +4" + ANSI_WHITE + " card, has " + qtyColor + leftInHand +
+                    ANSI_WHITE + " " + "cards left \n" );
+        }
+        else {
+            String cardColor = card.getColor().toString();
+            String textColor = convertCardColor(cardColor);
+            String cardValue = (card.getAction().equalsIgnoreCase("null")) ? String.valueOf(card.getNumber()) :
+                    card.getAction();
+
+            System.out.println( name + " played a " + textColor + cardColor + " " + cardValue + ANSI_WHITE + ", has " + leftInHand + " " +
+                    "cards left \n" );
+        }
     }
 
     public static void matchCard(Card card){
+        if ("WILD".equalsIgnoreCase(card.getAction())){
+            System.out.println("The Card need to match is: " + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
+                    ANSI_RED + "L" + ANSI_YELLOW + "D" + ANSI_WHITE + "\n" );
+        }
+        else if ("WILD+4".equalsIgnoreCase(card.getAction())) {
+            System.out.println("The Card need to match is: " + ANSI_GREEN + "W" + ANSI_BLUE + "I" +
+                    ANSI_RED + "L" + ANSI_YELLOW + "D +4" + ANSI_WHITE + "\n");
+        }
+        else {
 
-        String cardColor = card.getColor().toString();
-        String textColor = convertCardColor(cardColor);
-        String cardValue = (card.getAction().equalsIgnoreCase("null")) ? String.valueOf(card.getNumber()) :
-                card.getAction();
+            String cardColor = card.getColor().toString();
+            String textColor = convertCardColor(cardColor);
+            String cardValue = (card.getAction().equalsIgnoreCase("null")) ? String.valueOf(card.getNumber()) :
+                    card.getAction();
 
-        System.out.println("The Card you need to match is: " + textColor + cardColor + " " + cardValue + ANSI_WHITE + "\n");
+            System.out.println("The Card need to match is: " + textColor + cardColor + " " + cardValue + ANSI_WHITE + "\n");
+        }
     }
 
     public static void gameOverPlayerQuit(){
-        System.out.println("Game Over. Player quited game");
+        System.out.println(gameOver + "\n       Game Over. Player quited game");
     }
 
-    public static void drawCard(String name, String qty){
-        System.out.println(name + " draws " + qty + " card(s).\n");
+    public static void skipPlayer(String name){
+        System.out.println(name + " is skipped. \n");
+    }
+
+    public static void drawCard(Player player, String qty){
+
+        String name = player.getName();
+        int cardsQty = player.getCardsInHand().size();
+        String qtyColor = cardsQty < 2 ? ANSI_RED : ANSI_WHITE;
+
+        System.out.println(name + " draws " + qty + " card(s), has " + qtyColor + cardsQty + ANSI_WHITE + " card(s) " +
+                "left\n");
     }
 
     public static void showCardsInHand(List<Card> cardsInHand){
         StringBuilder message = new StringBuilder();
         message.append("You Have ").append(cardsInHand.size()).append(" cards: ");
         for (int i = 0; i<cardsInHand.size(); i++){
-            String cardColor = cardsInHand.get(i).getColor().toString();
-            String textColor = convertCardColor(cardColor);
-            String cardValue = (cardsInHand.get(i).getAction().equalsIgnoreCase("null")) ?
-                    String.valueOf(cardsInHand.get(i).getNumber()) : cardsInHand.get(i).getAction();
-            message.append("\n [ " + (i+1) + " ]  "  + textColor + cardColor + " " + cardValue + ANSI_WHITE);
+            if ("WILD".equalsIgnoreCase(cardsInHand.get(i).getAction())){
+                message.append("\n [ " + (i+1) + " ]  "  + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
+                        ANSI_RED + "L" + ANSI_YELLOW + "D" + ANSI_WHITE);
+            } else if ("WILD+4".equalsIgnoreCase(cardsInHand.get(i).getAction())){
+                message.append("\n [ " + (i+1) + " ]  "  + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
+                        ANSI_RED + "L" + ANSI_YELLOW + "D +4" + ANSI_WHITE);
+            }
+            else {
+                String cardColor = cardsInHand.get(i).getColor().toString();
+                String textColor = convertCardColor(cardColor);
+                String cardValue = (cardsInHand.get(i).getAction().equalsIgnoreCase("null")) ?
+                        String.valueOf(cardsInHand.get(i).getNumber()) : cardsInHand.get(i).getAction();
+                message.append("\n [ " + (i+1) + " ]  "  + textColor + cardColor + " " + cardValue + ANSI_WHITE);
+            }
         }
         System.out.println(message + ANSI_WHITE + "\n");
     }

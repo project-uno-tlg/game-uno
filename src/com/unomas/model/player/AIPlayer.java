@@ -5,6 +5,7 @@ import com.unomas.controller.Dealer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class AIPlayer extends Player {
 
@@ -14,7 +15,7 @@ class AIPlayer extends Player {
 
     @Override
     public Card playCard() {
-        List<Card> playableCards = new ArrayList<>();
+        List<Card> playableCards;
         int maxIndex = 0;
         Card playedCard;
         boolean hasValidCard;
@@ -23,17 +24,23 @@ class AIPlayer extends Player {
         hasValidCard = checkCard(cardToMatch);
 
         if (hasValidCard) {
-            for (Card card : cardsInHand) {
-                if (card.getColor() == cardToMatch.getColor() || card.getNumber() == cardToMatch.getNumber()) {
-                    playableCards.add(card);
-                }
-            }
+
+            playableCards = cardsInHand.stream()
+                    .filter(card -> card.getColor() == cardToMatch.getColor() ||
+                            card.getNumber() == cardToMatch.getNumber() && card.getNumber() != -1 ||
+                            card.getAction().equalsIgnoreCase(cardToMatch.getAction()) &&
+                                    !"null".equalsIgnoreCase(cardToMatch.getAction()) ||
+                                    "WILD".equalsIgnoreCase(cardToMatch.getAction()) ||
+                                    "WILD".equalsIgnoreCase(card.getAction()) ||
+                                    "WILD+4".equalsIgnoreCase(cardToMatch.getAction()) ||
+                                    "WILD+4".equalsIgnoreCase(card.getAction())
+                            )
+                    .collect(Collectors.toList());
 
             maxIndex = playableCards.size();
             playedCard = playableCards.get((int) (Math.random() * (maxIndex)));
             cardsInHand.remove(playedCard);
         }
-
         else {          //if player does not have a hasValidCard have the dealer distribute a card to that player
             playedCard = null;
         }

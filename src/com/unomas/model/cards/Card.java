@@ -4,8 +4,12 @@ public class Card {
 
     private String action = "null";
     private CardColor color;
-    private int number;
+    private int number = -1; // default value 0 mess up things
     private boolean wannaQuit = false;
+
+    private Card(String action){
+        setAction(action);
+    }
 
     private Card(CardColor color, int number){
         setColor(color);
@@ -29,6 +33,8 @@ public class Card {
     public static Card getInstance(CardColor color, String action){
         return new Card(color, action);
     }
+
+    public static Card getInstance(String action) { return new Card(action); }
 
     public static Card getQuitCard(){
         return new Card();
