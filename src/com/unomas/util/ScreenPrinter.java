@@ -53,8 +53,10 @@ public class ScreenPrinter {
                 "\n" +
                 "3. Then Dealer opens one card in deck as an indicator for the starter. \n" +
                 "\n" +
-                "4. The picked player’s turn started (Computer or Human).  Player must play a card that matches either a number or color.\n" +
-                "   If player does not have it, the system will draw one from the deck for you and place it in your deck. \n" +
+                "4. The picked player’s turn started (Computer or Human).  Player must play a card that matches " +
+                "either a number or color, or play an allowed action card.\n" +
+                "   If player could not play any card, the system will draw one from the deck for you and place it in" +
+                " your deck. \n" +
                 "   If the drawn card is a match, " +"then the system will automatically play it; Or move to the next player. \n" +
                 "\n" +
                 "5. All players follow rule #4 and game keeps going and going. \n" +
@@ -66,7 +68,7 @@ public class ScreenPrinter {
 
 
     public static void gameOverWithWinner(String player){
-        System.out.println(gameOver + winner + "        " +player);
+        System.out.println(gameOver + winner + "        " +player + "\n");
     }
 
     public static void gameOverDeckOutOfCard(){
@@ -78,14 +80,14 @@ public class ScreenPrinter {
         String qtyColor = leftInHand < 2 ? ANSI_RED : ANSI_WHITE;
 
         if ("WILD".equalsIgnoreCase(card.getAction())){
-            System.out.println(name + " played a " + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
+            System.out.println("\n" +name + " played a " + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
                     ANSI_RED + "L" + ANSI_YELLOW + "D" + ANSI_WHITE + " card, has " + qtyColor + leftInHand +
-                    ANSI_WHITE + " " + "cards left \n" );
+                    ANSI_WHITE + " " + "cards left" );
         }
         else if ("WILD+4".equalsIgnoreCase(card.getAction())){
-            System.out.println(name + " played a " + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
+            System.out.println("\n" +name + " played a " + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
                     ANSI_RED + "L" + ANSI_YELLOW + "D +4" + ANSI_WHITE + " card, has " + qtyColor + leftInHand +
-                    ANSI_WHITE + " " + "cards left \n" );
+                    ANSI_WHITE + " " + "cards left " );
         }
         else {
             String cardColor = card.getColor().toString();
@@ -93,19 +95,19 @@ public class ScreenPrinter {
             String cardValue = (card.getAction().equalsIgnoreCase("null")) ? String.valueOf(card.getNumber()) :
                     card.getAction();
 
-            System.out.println( name + " played a " + textColor + cardColor + " " + cardValue + ANSI_WHITE + ", has " + leftInHand + " " +
-                    "cards left \n" );
+            System.out.println( "\n" + name + " played a " + textColor + cardColor + " " + cardValue + ANSI_WHITE +
+                    ", has " + qtyColor + leftInHand + ANSI_WHITE + " " + "cards left" );
         }
     }
 
     public static void matchCard(Card card){
         if ("WILD".equalsIgnoreCase(card.getAction())){
-            System.out.println("The Card need to match is: " + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
-                    ANSI_RED + "L" + ANSI_YELLOW + "D" + ANSI_WHITE + "\n" );
+            System.out.println("\nThe Card need to match is: " + ANSI_GREEN + "W" + ANSI_BLUE+ "I" +
+                    ANSI_RED + "L" + ANSI_YELLOW + "D" + ANSI_WHITE );
         }
         else if ("WILD+4".equalsIgnoreCase(card.getAction())) {
-            System.out.println("The Card need to match is: " + ANSI_GREEN + "W" + ANSI_BLUE + "I" +
-                    ANSI_RED + "L" + ANSI_YELLOW + "D +4" + ANSI_WHITE + "\n");
+            System.out.println("\nThe Card need to match is: " + ANSI_GREEN + "W" + ANSI_BLUE + "I" +
+                    ANSI_RED + "L" + ANSI_YELLOW + "D +4" + ANSI_WHITE);
         }
         else {
 
@@ -114,7 +116,7 @@ public class ScreenPrinter {
             String cardValue = (card.getAction().equalsIgnoreCase("null")) ? String.valueOf(card.getNumber()) :
                     card.getAction();
 
-            System.out.println("The Card need to match is: " + textColor + cardColor + " " + cardValue + ANSI_WHITE + "\n");
+            System.out.println("\nThe Card need to match is: " + textColor + cardColor + " " + cardValue + ANSI_WHITE);
         }
     }
 
@@ -123,7 +125,7 @@ public class ScreenPrinter {
     }
 
     public static void skipPlayer(String name){
-        System.out.println(name + " is skipped. \n");
+        System.out.println("\n" + name + " is skipped");
     }
 
     public static void drawCard(Player player, String qty){
@@ -132,8 +134,8 @@ public class ScreenPrinter {
         int cardsQty = player.getCardsInHand().size();
         String qtyColor = cardsQty < 2 ? ANSI_RED : ANSI_WHITE;
 
-        System.out.println(name + " draws " + qty + " card(s), has " + qtyColor + cardsQty + ANSI_WHITE + " card(s) " +
-                "left\n");
+        System.out.println("\n" + name + " draws " + qty + " card(s), has " + qtyColor + cardsQty + ANSI_WHITE + " " +
+                "card(s) left");
     }
 
     public static void showCardsInHand(List<Card> cardsInHand){
@@ -155,7 +157,7 @@ public class ScreenPrinter {
                 message.append("\n [ " + (i+1) + " ]  "  + textColor + cardColor + " " + cardValue + ANSI_WHITE);
             }
         }
-        System.out.println(message + ANSI_WHITE + "\n");
+        System.out.println("\n" + message + ANSI_WHITE);
     }
 
 

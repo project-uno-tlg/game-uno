@@ -16,7 +16,7 @@ public class DeckTest {
 
     @Test
     public void generateDeck_shouldCreateDeck_withEightyCards(){
-        assertEquals( 76, testDeck.getCardsCountInDeck());
+        assertEquals( 108, testDeck.getCardsCountInDeck());
     }
 
     @Test
@@ -35,7 +35,7 @@ public class DeckTest {
     @Test
     public void drawOneCardFromDeck_shouldReturnOneCard_andReduceCardInDeckQty(){
         Card card = testDeck.drawOneCardFromDeck();
-        assertEquals(75, testDeck.getCardsCountInDeck());
+        assertEquals(107, testDeck.getCardsCountInDeck());
     }
 
 }
