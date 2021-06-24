@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Game {
-    public static final int MAX_PLAYER_COUNT = 5;
+    public static final int MAX_AI_PLAYER_COUNT = 5;
 
     private int playerCount;
     private List<Player> players = new ArrayList<>();
@@ -32,7 +32,7 @@ public class Game {
         if (playerCount <= 0){
             quit();
         }
-        if (playerCount > MAX_PLAYER_COUNT) {
+        if (playerCount > MAX_AI_PLAYER_COUNT) {
             System.out.println("Sorry only 6 players allowed. Setting up a game with 6 players...");
             this.playerCount = 5;
         } else {
@@ -42,13 +42,15 @@ public class Game {
 
     // Business Methods
     private void quit() {
-        prompter.info("Game Over GoodBye.");
+        ScreenPrinter.gameOverPlayerQuit();
         System.exit(0);
     }
 
     public void start() {
         ScreenPrinter.welcome();
-        setPlayerCount(Integer.parseInt(prompter.prompt("How many computer players (1-6) \n"+"Entering 0 will exit the game : ",
+        setPlayerCount(Integer.parseInt(prompter.prompt("How many computer players (1-5) do you want to play with \n"+
+                        "Entering" +
+                        " 0 will exit the game : ",
                 "\\d+", "That is not a valid number!")));
         players.add(createRealPlayer(prompter.prompt("Type your name: ")));
         createAI(getPlayerCount());

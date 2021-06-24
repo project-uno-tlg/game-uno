@@ -8,9 +8,9 @@ import java.util.List;
 public abstract class Player{
 
     //FIELDS
-    public List<Card> cardsInHand = new ArrayList<>();
-    public String name;
-    public boolean isAI = false;
+    private List<Card> cardsInHand = new ArrayList<>();
+    private String name;
+    private boolean isAI = false;
 
     //CONSTRUCTORS
     public Player(String name) {

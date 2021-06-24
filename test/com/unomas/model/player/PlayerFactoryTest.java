@@ -17,9 +17,9 @@ public class PlayerFactoryTest extends TestCase {
 
 
     public void testCreateHumanPlayer() {
-        assertEquals(hPlayer.name, PlayerFactory.createPlayer("Jack",false).name);
+        assertEquals(hPlayer.getName(), PlayerFactory.createPlayer("Jack",false).getName());
     }
     public void testCreateAIPlayer() {
-        assertEquals(cPlayer.name, PlayerFactory.createPlayer("computer1",true).name);
+        assertEquals(cPlayer.getName(), PlayerFactory.createPlayer("computer1",true).getName());
     }
 }
