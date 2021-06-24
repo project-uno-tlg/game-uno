@@ -21,8 +21,9 @@ To get the ANSI color code:
    
    ```reg add HKEY_CURRENT_USER\Console /v VirtualTerminalLevel /t REG_DWORD /d 0x00000001 /f```
 
-2. Then change add_colors.txt to add_colors.bat, double click to run it,  to have the cmd prompt understand the 
-   ANSI code.
+2. Then change ***add_colors.txt*** to ***add_colors.bat***, double click to run it,  to have the cmd prompt understand 
+   the ANSI code.
+   
    If you get a warning just click continue anyway.
 
 3. After those two steps your command prompt should be ready to see the colors of the UNO MAS game.
@@ -68,3 +69,8 @@ How to Play:
 
 7. At any time, the human player can call “quit” to stop the game.
 
+## Game pics
+
+![game1](game1.png)
+
+![game2](game2.png)
